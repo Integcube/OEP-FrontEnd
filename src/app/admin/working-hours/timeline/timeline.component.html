@@ -1,0 +1,113 @@
+<section class="content">
+    <div class="content-block">
+        <div class="block-header">
+            <!-- breadcrumb -->
+            <app-breadcrumb [title]="'Running Hours'" [items]="[]" [active_item]="'Timeline'"></app-breadcrumb>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="row mb-0">
+                        <div class="col-md-2">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Regions</mat-label>
+                              <mat-select [(ngModel)]="filterObj.regionId" (selectionChange)="getCluster($event.value)">
+                                <mat-option [value]="-1">--All--</mat-option>
+                                <mat-option *ngFor="let d of regions" [value]="d.regionId">{{d.regionTitle}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>                          
+                          <div class="col-md-3 pb-0">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Cluster</mat-label>
+                              <mat-select [(ngModel)]="filterObj.clusterId" (selectionChange)="getSites($event.value)">
+                                <mat-option [value]="-1">--All--</mat-option>
+                                <mat-option *ngFor="let rf of cluster" [value]="rf.clusterId">{{rf.clusterTitle}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 pb-0">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Sites</mat-label>
+                              <mat-select [(ngModel)]="filterObj.siteId"  (selectionChange)="getEquipments($event.value)">
+                                <mat-option [value]="-1">--All--</mat-option>
+                                <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-md-3 pb-0">
+                            <mat-form-field class="example-full-width" appearance="outline">
+                              <mat-label>Unit</mat-label>
+                              <mat-select [(ngModel)]="filterObj.equipmentId">
+                                <mat-option [value]="-1">--All--</mat-option>
+                                <mat-option *ngFor="let rf of equipments" [value]="rf.equipmentId">{{rf.siteTitle +"-"+rf.unit}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        <div class="col-md-1 float-end">
+                            <div class="float-end">
+                                <button mat-mini-fab color="accent" matTooltip="SEARCH" aria-label="Example icon button with a bookmark icon"
+                                (click)="getData()">
+                                <mat-icon>search</mat-icon>
+                            </button>
+                            </div>
+                            
+                        </div>
+                </div>
+            </div>
+        </div>
+        <ng-container *ngIf="topLevelArr">
+            <div class="row" *ngFor="let f of topLevelArr">
+                <div class="card">
+                    <div class="body">
+                        <div class="col-md-12">
+                            <h4>{{f.unit}}</h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="body table-responsive  mb-4">
+                                <table class="table table-bordered  mb-4">
+                                    <thead>
+                                        <tr>
+                                          <th style="max-width: 5%;"><b>Years</b></th>
+                                            <th *ngFor="let k of f.yearData" style="min-width: 20%;">
+                                                {{k.yearId}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td style="max-width: 5%;"><b>WOH</b></td>
+                                        <td *ngFor="let k of f.yearData" style="min-width: 20%;">
+                                          {{k.yearlyTotal | roundedNumber: 2}}</td>
+                                      </tr>
+                                      <tr *ngIf="f.eqType == 'GT'">
+                                        <td style="min-width: 5%;"><b>WCE</b></td>
+
+                                        <td *ngFor="let k of f.yearWCE" style="min-width: 20%;">
+                                          {{k.yearlyTotal | roundedNumber: 2}}</td>
+                                      </tr>
+                                      <tr>
+                                        <td style="min-width: 5%;"><b>Outage</b></td>
+
+                                        <td *ngFor="let k of f.yearData">
+                                          <ng-container *ngFor="let l of k.outages">
+                                            {{l.outageTitle}}
+                                          </ng-container>
+                                        </td>
+                                      </tr>
+                                     
+                                      <!-- <tr *ngIf="f.eqType == 'GT'">
+                                        <td *ngFor="let k of f.yearWCE">
+                                          <ng-container *ngFor="let l of k.outages">
+                                            {{l.outageTitle}}
+                                          </ng-container>
+                                        </td>
+                                      </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</section>
