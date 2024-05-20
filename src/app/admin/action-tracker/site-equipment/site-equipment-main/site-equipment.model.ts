@@ -18,6 +18,7 @@ export class SiteEquipment{
     unit:string; 
     oemId:number;
     oemTitle:string;
+    cluster:string;
    
     constructor(reg){
         this.equipmentId=reg.equipmentId?reg.equipmentId:-1;
@@ -32,6 +33,7 @@ export interface SEFilter{
     modelId:number,
     fleetEquipId:number,
     outageTypeId:number,
+    clusterId: number
 
 }
 export interface SERegions{

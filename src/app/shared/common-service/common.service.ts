@@ -37,8 +37,8 @@ export class CommonService {
   private readonly fleetEquipmentURL = `${environment.apiUrl}/CommonFilter/getFleetEquipment`;
 
   constructor(private http:HttpClient) { }
-  getSites(userId: number, regionId:number, siteId:number): Observable<CSites[]> {
-    let data = { "userId": userId , "regionId":regionId, "siteId":siteId};
+  getSites(userId: number, regionId:number, siteId:number,clusterId?:number): Observable<CSites[]> {
+    let data = { "userId": userId , "regionId":regionId, "siteId":siteId,"clusterId":clusterId};
     return this.http.post<CSites[]>(this.siteURL, data)
   }
   getKPISites(userId: number, regionId:number, siteId:number): Observable<CSites[]> {

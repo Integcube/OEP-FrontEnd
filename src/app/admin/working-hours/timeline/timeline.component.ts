@@ -61,7 +61,7 @@ export class TimelineComponent extends UnsubscribeOnDestroyAdapter implements On
   ngOnInit(): void {
     this.getRegions()
     this.getSites(-1)
-    this.getCluster(-1)
+    this.getCluster(-1);
     this.getEquipments(-1)
     this.getData()
   }

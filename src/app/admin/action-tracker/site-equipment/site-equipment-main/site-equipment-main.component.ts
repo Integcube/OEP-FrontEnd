@@ -43,7 +43,8 @@ export class SiteEquipmentMainComponent extends UnsubscribeOnDestroyAdapter impl
     fleetEquipId: -1,
     outageTypeId: -1,
     oemId: -1,
-    equipmentTypeId: -1
+    equipmentTypeId: -1,
+    clusterId:-1
   }
   regionsFilterList:any[]=[];
   sitesFilterList:any[]=[];

@@ -42,7 +42,8 @@ export class SiteEquipmentsComponent extends UnsubscribeOnDestroyAdapter impleme
     fleetEquipId: -1,
     outageTypeId: -1,
     oemId: -1,
-    equipmentTypeId: -1
+    equipmentTypeId: -1,
+    clusterId:-1,
   }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -111,11 +112,6 @@ export class SiteEquipmentsComponent extends UnsubscribeOnDestroyAdapter impleme
       error: err => { this.showNotification('black', err, 'bottom', 'center'); }
     })
   }
-
-
-
-
-
   getSiteEquipment() {
     this.isTableLoading = true;
     this.subs.sink = this.dataService.getSiteEquipment(this.user.id, this.filterObj).subscribe({
