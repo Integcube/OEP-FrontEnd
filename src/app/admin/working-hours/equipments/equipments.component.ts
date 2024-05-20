@@ -81,7 +81,8 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
-  getSite(Clu:number){
+  getSite(Clu
+    :number){
     this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, -1 ,-1, -1).subscribe({
       next:data=>{
         this.sites = [...data]
