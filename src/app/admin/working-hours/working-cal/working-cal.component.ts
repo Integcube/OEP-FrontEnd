@@ -10,7 +10,7 @@ import { CommonService } from 'src/app/shared/common-service/common.service';
 import { WorkingCalService } from './working-cal.service';
 import { ApiSave, WH_WorkingCalcFilter, WorkingHourModel } from './working-cal.model';
 import { DeleteCalcComponent } from './dialogs/delete-calc/delete-calc.component';
-import { CEquipment, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CEquipment, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { AddHoursComponent } from './dialogs/add-hours/add-hours.component';
 import { AddCalcComponent } from './dialogs/add-calc/add-calc.component';
 
@@ -31,13 +31,15 @@ export class WorkingCalComponent extends UnsubscribeOnDestroyAdapter implements 
     regionId: -1,
     siteId: -1,
     equipmentId: -1,
+    clusterId: -1,
   }
+  cluster: CCluster[];
   //Common
   errorMessage:string;
   isTableLoading: boolean;
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
-  displayedColumns: string[] = ['id', 'regionTitle', 'siteTitle', 'unit', 'startDate', 'startHours', 'eoc','wceHours', 'actions'];
+  displayedColumns: string[] = ['id', 'regionTitle','cluster' ,'siteTitle', 'unit', 'startDate', 'startHours', 'eoc','wceHours', 'actions'];
   dataSource: MatTableDataSource<WorkingHourModel>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -50,6 +52,7 @@ export class WorkingCalComponent extends UnsubscribeOnDestroyAdapter implements 
 
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource<WorkingHourModel>(this.workingHoursUnit);
+    this.getCluster(-1);
     this.getData();
     this.getSites(-1);
     this.getRegions();
@@ -58,8 +61,8 @@ export class WorkingCalComponent extends UnsubscribeOnDestroyAdapter implements 
 
 
   //Cruds
-  getSites(regionId:number){
-    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, regionId, -1,-1).subscribe({
+  getSites(clusterId:number){
+    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, -1, -1,clusterId).subscribe({
       next:data=>{
         this.filterObj.siteId = -1
         this.sites = [...data]},
@@ -204,4 +207,15 @@ export class WorkingCalComponent extends UnsubscribeOnDestroyAdapter implements 
       this.dataSource.paginator.firstPage();
     }
   }
+
+  getCluster(regionId: number) {
+    this.subs.sink = this.dataService2.getClusters(-1, regionId, -1).subscribe({
+      next: data => {
+        this.filterObj.clusterId = -1
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
+  }
+
 }

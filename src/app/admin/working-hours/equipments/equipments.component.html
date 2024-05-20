@@ -65,7 +65,7 @@
           <div class="col-md-3 pb-0">
             <mat-form-field class="example-full-width" appearance="outline">
               <mat-label>Cluster</mat-label>
-              <mat-select [(ngModel)]="filterObj.clusterId" (selectionChange)="getSites($event.value)">
+              <mat-select [(ngModel)]="filterObj.clusterId" (selectionChange)="getSite($event.value)">
                 <mat-option [value]="-1">--All--</mat-option>
                 <mat-option *ngFor="let rf of cluster" [value]="rf.clusterId">{{rf.clusterTitle}}</mat-option>
               </mat-select>

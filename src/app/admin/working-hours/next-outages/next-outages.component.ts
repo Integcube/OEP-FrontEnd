@@ -6,7 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { User } from 'src/app/core/models/user';
 import { UnsubscribeOnDestroyAdapter } from 'src/app/shared/UnsubscribeOnDestroyAdapter';
-import { CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { OT_NextOutages, OT_IEquipments } from '../../outage-tracker/next-outages/site-next-outages.model';
 import { NextOutagesService } from './next-outages.service';
@@ -28,8 +28,10 @@ export class NextOutagesComponent extends UnsubscribeOnDestroyAdapter implements
   regionId: -1,
   siteId: -1,
   equipmentId: -1,
-  outageId: -1
+  outageId: -1,
+  clusterId: -1
 }
+cluster: CCluster[];
 displayFilter: Boolean = false;
  nextOutages: OT_NextOutages[];
  siteNextOutages: OT_SiteNextOutage[];
@@ -42,7 +44,7 @@ displayFilter: Boolean = false;
  user: User = JSON.parse(localStorage.getItem('currentUser'));
  constructor(private snackBar: MatSnackBar, private dataService: NextOutagesService, private dataService2:CommonService,public dialog: MatDialog,) { super() }
 
- displayedColumns: string[] = ['id','regionTitle', 'siteTitle', 'unit','outageTitle',  'nextOutageDate','runningHours','wceHours', 'actions'];
+ displayedColumns: string[] = ['id','regionTitle','clusterTitle', 'siteTitle', 'unit','outageTitle',  'nextOutageDate','runningHours','wceHours', 'actions'];
  dataSource: MatTableDataSource<OT_SiteNextOutage>;
  @ViewChild(MatSort) sort: MatSort;
  @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,6 +55,7 @@ displayFilter: Boolean = false;
  }
  ngOnInit(): void {
    this.dataSource = new MatTableDataSource<OT_SiteNextOutage>(this.siteNextOutages);
+   this.getCluster(-1);
    this.getInterface();
    this.getEquipments(-1);
    this.getRegions();
@@ -69,8 +72,8 @@ displayFilter: Boolean = false;
      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
    })
  }
- getSite(regionId:number){
-  this.subs.sink = this.dataService2.getSites(this.user.id, regionId , -1).subscribe({
+ getSite(clusterId:number){
+  this.subs.sink = this.dataService2.getSites(this.user.id, -1,-1 ,clusterId,).subscribe({
     next:data=>{
       this.filterObj.siteId = -1
       this.sites = [...data]
@@ -213,5 +216,13 @@ getRegions(){
      this.dataSource.paginator.firstPage();
    }
  }
-
+ getCluster(regionId: number) {
+  this.subs.sink = this.dataService2.getClusters(-1, regionId, -1).subscribe({
+    next: data => {
+      this.filterObj.clusterId = -1
+      this.cluster = [...data];
+    },
+    error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+  })
+}
 }

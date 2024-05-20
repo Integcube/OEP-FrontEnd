@@ -11,6 +11,7 @@ export class WH_ContractOutage {
     nextOutageDate: String;
     runningHours: number;
     outageDurationInDays: number;
+    cluster: String;
     constructor(reg) {
         this.contractOutageId = reg.contractOutageId ? reg.contractOutageId : -1;
     }
@@ -37,5 +38,6 @@ export interface WH_ContractOutageFilter{
     regionId:number;
     siteId:number;
     equipmentId:number;
-    outageId:number
+    outageId:number,
+    clusterId:number
 }

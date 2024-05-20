@@ -21,7 +21,6 @@ export class ContractOutagesService {
   constructor(private http: HttpClient) { }
   getSiteOutages(userId: number, filter:WH_ContractOutageFilter): Observable<WH_ContractOutage[]> {
     let data = { userId, filter }
-    debugger;
     return this.http.post<WH_ContractOutage[]>(this.getSiteNextOutagsURL, data)
   }
   getInterfaces(userId: number): Observable<WH_Outages[]> {

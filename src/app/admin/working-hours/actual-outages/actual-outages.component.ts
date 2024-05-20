@@ -27,7 +27,8 @@ export class ActualOutagesComponent extends UnsubscribeOnDestroyAdapter implemen
   regionId: -1,
   siteId: -1,
   equipmentId: -1,
-  outageId: -1
+  outageId: -1,
+  clusterId:-1,
 }
 displayFilter: Boolean = false;
  nextOutages: OT_NextOutages[];

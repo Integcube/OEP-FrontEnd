@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { OT_SiteNextOutage } from '../../outage-tracker/next-outages/site-next-outages.model';
 import { User } from 'src/app/core/models/user';
@@ -26,8 +26,10 @@ export class ContractOutagesComponent extends UnsubscribeOnDestroyAdapter implem
     regionId: -1,
     siteId: -1,
     equipmentId: -1,
-    outageId: -1
+    outageId: -1,
+    clusterId: -1
   }
+  cluster: CCluster[];
  //Varaibles
  sites: CSites[];
  regions:CRegions[];
@@ -43,7 +45,7 @@ export class ContractOutagesComponent extends UnsubscribeOnDestroyAdapter implem
  user: User = JSON.parse(localStorage.getItem('currentUser'));
  constructor(private snackBar: MatSnackBar, private dataService: ContractOutagesService, private dataService2:CommonService,public dialog: MatDialog,) { super() }
 
- displayedColumns: string[] = ['id','regionTitle', 'siteTitle', 'unit','outageTitle',  'nextOutageDate', 'actions'];
+ displayedColumns: string[] = ['id','regionTitle', 'cluster','siteTitle', 'unit','outageTitle',  'nextOutageDate', 'actions'];
  dataSource: MatTableDataSource<WH_ContractOutage>;
  @ViewChild(MatSort) sort: MatSort;
  @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,6 +56,7 @@ export class ContractOutagesComponent extends UnsubscribeOnDestroyAdapter implem
  }
  ngOnInit(): void {
    this.dataSource = new MatTableDataSource<WH_ContractOutage>(this.siteNextOutages);
+   this.getCluster(-1);
    this.getInterface();
    this.getEquipments(-1);
    this.getSite(-1);
@@ -73,8 +76,8 @@ export class ContractOutagesComponent extends UnsubscribeOnDestroyAdapter implem
  toggleFilter() {
   this.displayFilter = !this.displayFilter;
 }
-getSite(regionId:number){
-  this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, regionId , -1,-1).subscribe({
+getSite(clusterId:number){
+  this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, -1 , -1,clusterId).subscribe({
     next:data=>{
       this.filterObj.siteId = -1
       this.sites = [...data]
@@ -216,5 +219,13 @@ getRegions(){
      this.dataSource.paginator.firstPage();
    }
  }
-
+ getCluster(regionId: number) {
+  this.subs.sink = this.dataService2.getClusters(-1, regionId, -1).subscribe({
+    next: data => {
+      this.filterObj.clusterId = -1
+      this.cluster = [...data];
+    },
+    error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+  })
+}
 }
