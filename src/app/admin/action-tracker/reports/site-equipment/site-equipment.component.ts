@@ -50,7 +50,8 @@ cluster:CCluster[]=[];
     fleetEquipId: -1,
     outageTypeId: -1,
     oemId: -1,
-    equipmentTypeId: -1
+    equipmentTypeId: -1,
+    clusterId:-1
   }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;

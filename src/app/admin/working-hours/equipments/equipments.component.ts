@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
+import { CCluster, CRegions, CSites, CUsers } from 'src/app/shared/common-interface/common-interface';
 import { CommonService } from 'src/app/shared/common-service/common.service';
 import { FleetEquipmentComponent } from '../../action-tracker/common-dialogs/fleet-equipment/fleet-equipment.component';
 import { SiteEquipment, SESiteEquipmentOME, SESiteEquipmentType, SEFleet, SEFilter } from '../../action-tracker/site-equipment/site-equipment-main/site-equipment.model';
@@ -33,7 +33,7 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
   isTableLoading: boolean;
   //Get data from browsers Local Storage
   user: User = JSON.parse(localStorage.getItem('currentUser'));
-  displayedColumns: string[] = ['id', 'regionTitle', 'siteTitle', 'unit', 'model', 'modelEquipmentType', 'oemTitle', 'nextOutage', 'outageType', 'actions'];
+  displayedColumns: string[] = ['id', 'regionTitle','cluster', 'siteTitle', 'unit', 'model', 'modelEquipmentType', 'oemTitle', 'nextOutage', 'outageType', 'actions'];
   dataSource: MatTableDataSource<SiteEquipment>;
   filterObj: SEFilter = {
     regionId: -1,
@@ -42,8 +42,10 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
     fleetEquipId: -1,
     outageTypeId: -1,
     oemId: -1,
-    equipmentTypeId: -1
+    equipmentTypeId: -1,
+    clusterId: -1,
   }
+  cluster: CCluster[];
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   ngAfterViewInit() {
@@ -56,6 +58,7 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
     this.dataSource = new MatTableDataSource<SiteEquipment>(this.SiteEquipments);
     this.getInterfaces();
     this.getSite(-1);
+    this.getCluster(-1);
     this.getRegions();
     this.getUsers();
     this.getSiteEquipment();
@@ -78,8 +81,8 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
-  getSite(regionId:number){
-    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, regionId ,-1, -1).subscribe({
+  getSite(clusterId:number){
+    this.subs.sink = this.dataService2.getUpdatedSites(this.user.id, -1 ,-1, clusterId).subscribe({
       next:data=>{
         this.sites = [...data]
       },
@@ -111,9 +114,6 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
       error: err => { this.showNotification('black', err, 'bottom', 'center'); }
     })
   }
-
-
-
 
 
   getSiteEquipment() {
@@ -224,6 +224,14 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
       this.dataSource.paginator.firstPage();
     }
   }
-
+  getCluster(regionId: number) {
+    this.subs.sink = this.dataService2.getClusters(-1, regionId, -1).subscribe({
+      next: data => {
+        this.filterObj.clusterId = -1
+        this.cluster = [...data];
+      },
+      error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
+    })
+  }
 
 }

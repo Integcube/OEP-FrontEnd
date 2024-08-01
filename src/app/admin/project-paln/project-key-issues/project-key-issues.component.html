@@ -1,0 +1,286 @@
+<style>
+    .mat-expansion-panel-header {
+    height: 100px!important;
+}
+
+</style>
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Key Issues'" [items]="[]" [active_item]="'Top 5 Key Issues'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row ms-2 me-2 mt-2">
+                  <div class="col-md-3 mt-2">
+                    <!-- <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Month</mat-label>
+                        <input matInput [matDatepicker]="ECODDate" ngDefaultControl    [(ngModel)]="KeyIssues.Date"  (dateChange)="getKeyIssues()">
+                        <mat-datepicker-toggle matSuffix [for]="ECODDate"></mat-datepicker-toggle>
+                        <mat-datepicker #ECODDate startView="year"></mat-datepicker>
+                      </mat-form-field> -->
+
+                      <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Month</mat-label>
+                        <mat-select   ngDefaultControl [(ngModel)]="selectedMonth" (selectionChange)="getKeyIssues()"> 
+     
+                          <mat-option *ngFor="let s of monthsList" [value]="s.Index">{{s.Title}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                  </div> 
+                  <div class="col-md-3 mt-2">
+                    
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Sites</mat-label>
+                      <mat-select   ngDefaultControl [(ngModel)]="KeyIssues.siteId" (selectionChange)="getKeyIssues()"> 
+                        <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="mt-3 mb-3 float-end">
+                      <button mat-raised-button color="primary" (click)="SaveKeyIssues()"> Save</button>
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <ng-container >
+        
+
+
+    <div class="card">
+        <div class="body">
+        <div class="row">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+          <strong> Please enter the number of documents received and reviewed, and complete the remaining fields. Thank you!</strong> 
+        </div>
+        </div>
+            <div class="row">
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Received Document</mat-label>
+            <input matInput  type="number" [(ngModel)]="KeyIssues.receiveddocument">
+          
+        </mat-form-field>
+    </div>
+    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+        <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Reviewed Document</mat-label>
+            <input matInput  type="number" [(ngModel)]="KeyIssues.revieweddocument">
+          
+        </mat-form-field>
+    </div>
+</div>
+</div>
+</div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="body">
+                        <div class="col-md-12">
+                            <h4>HSSE Issues</h4>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"> 
+                                <mat-form-field class="example-full-width" appearance="outline">
+                                    <mat-label>Record Top 5 Issues</mat-label>
+                                    <textarea matInput cdkTextareaAutosize
+                                    cdkAutosizeMinRows="6"
+                                    cdkAutosizeMaxRows="10"  [(ngModel)]="KeyIssues.hsseIssues"
+                                    (keydown.enter)="addBulletPointhsseIssues($event)"
+                                    
+                                    ></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                </div>
+             </div>
+             <div class="col-md-6">
+                <div class="card">
+                    <div class="body">
+                        <div class="col-md-12">
+                            <h4>Technical Issues</h4>
+                        </div>
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"> 
+                            <mat-form-field class="example-full-width" appearance="outline">
+                                <mat-label>Record Top 5 Issues</mat-label>
+                                <textarea matInput cdkTextareaAutosize
+                                cdkAutosizeMinRows="6"
+                                cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.technicalIssues"
+                                (keydown.enter)="addBulletPointtechnicalIssues($event)"
+                                >
+                            </textarea>
+                            </mat-form-field>
+                        </div>
+                     
+                    </div>
+                </div>
+             </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+
+            <div class="card">
+                <div class="body">
+                    <div class="col-md-12">
+                        <h4>Staffing Recruitment Issues</h4>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"> 
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Record Top 5 Issues</mat-label>
+                            <textarea matInput cdkTextareaAutosize
+                            cdkAutosizeMinRows="6"
+                            cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.recruitmentIssues"
+                             (keydown.enter)="addBulletPointrecruitmentIssues($event)"
+                             ></textarea>
+                        </mat-form-field>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+ 
+    <div class="col-md-6">
+            <div class="card">
+                <div class="body">
+                    <div class="col-md-12">
+                        <h4>Financial Commercial Issues</h4>
+                    </div>
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2"> 
+                        <mat-form-field class="example-full-width" appearance="outline">
+                            <mat-label>Record Top 5 Issues</mat-label>
+                            <textarea matInput cdkTextareaAutosize
+                            cdkAutosizeMinRows="6"
+                            cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.financialcommercial" (keydown.enter)="addBulletPointfinancialcommercial($event)"></textarea>
+                        </mat-form-field>
+                    </div>
+                 
+                </div>
+            </div> 
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+        <div class="card">
+            <div class="body">
+                <div class="col-md-12" style="margin-bottom:0!important">
+                    <h4>Ros Checklist Progress Status</h4>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="margin-bottom:0!important"> 
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Write here</mat-label>
+                        <textarea matInput cdkTextareaAutosize
+                        cdkAutosizeMinRows="6"
+                        cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.roschecklistprogress"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="row">      
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" style="margin-bottom:0!important">
+                        <div class="example-button-row float-start">
+                            <button mat-raised-button color="success" (click)="uploadEvidence(1)">
+                                <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                        </div>
+                    </div>   
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+<div class="col-md-6">
+        <div class="card">
+            <div class="body">
+                <div class="col-md-12" style="margin-bottom:0!important">
+                    <h4>Technical Risk Register Review Status</h4>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" style="margin-bottom:0!important"> 
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Write here</mat-label>
+                        <textarea matInput cdkTextareaAutosize
+                        cdkAutosizeMinRows="6"
+                        cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.technicalriskregister"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="row">      
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" style="margin-bottom:0!important">
+                        <div class="example-button-row float-start">
+                            <button mat-raised-button color="success" (click)="uploadEvidence(2)">
+                                <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                        </div>
+                    </div>   
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
+    <div class="card">
+        <div class="body">
+            <div class="col-md-12" style="margin-bottom:0!important">
+                <h4>Lessons Learned Review Status</h4>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" style="margin-bottom:0!important"> 
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Write here</mat-label>
+                    <textarea matInput cdkTextareaAutosize
+                    cdkAutosizeMinRows="6"
+                    cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.lessonslearned"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="row">      
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" style="margin-bottom:0!important">
+                    <div class="example-button-row float-start">
+                        <button mat-raised-button color="success" (click)="uploadEvidence(3)">
+                            <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                    </div>
+                </div>   
+               
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6">
+    <div class="card">
+        <div class="body">
+            <div class="col-md-12" style="margin-bottom:0!important">
+                <h4>Previous Action Call Item Status</h4>
+            </div>
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" style="margin-bottom:0!important"> 
+                <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Write here</mat-label>
+                    <textarea matInput cdkTextareaAutosize
+                    cdkAutosizeMinRows="6"
+                    cdkAutosizeMaxRows="10" [(ngModel)]="KeyIssues.previousactioncall"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="row">      
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6" style="margin-bottom:0!important">
+                    <div class="example-button-row float-start">
+                        <button mat-raised-button color="success" (click)="uploadEvidence(4)">
+                            <mat-icon>insert_drive_file</mat-icon>Evidence</button>
+                    </div>
+                </div>   
+               
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+    </ng-container>
+
+</div>
+</section>
+

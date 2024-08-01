@@ -11,6 +11,7 @@ export class WorkingHourModel{
     wceHours:number
     eqType:string
     onmContractExpiry:Date
+    cluster:string
     constructor(reg){
         this.startingId = reg.startingId?reg.startingId:-1
     }
@@ -41,4 +42,5 @@ export interface WH_WorkingCalcFilter{
     regionId:number;
     siteId:number;
     equipmentId:number;
+    clusterId:number;
 }

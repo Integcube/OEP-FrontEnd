@@ -1,0 +1,237 @@
+<style>
+    .table tbody tr td, .table tbody tr th {
+    padding: 7px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-table td, .mat-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.mat-table th {
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.sub1{
+  padding-left: 10px !important;
+}
+.sub2{
+  padding-left: 15px !important;
+}
+.sub3{
+  padding-left: 30px !important;
+}
+
+.sub4{
+  padding-left: 40px !important;
+}
+
+h4, .h4 {
+        font-size: 1.3rem!important
+    }
+
+    h5, .h5 {
+    font-size: 1.15rem!important;
+}
+.lasttext {
+    font-size: 0.8rem!important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+     margin: 0px!important;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0px!important;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0!important;
+  }
+  .table tbody tr td, .table tbody tr th {
+      padding: 5px!important;
+  }
+</style>
+
+<section class="content mb-4">
+    <div class="content-block mb-4">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Readiness CheckList'" [items]="[]" [active_item]="'Add CheckList'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card" style="margin-bottom: 8px!important">
+            <div class="body">
+              <div class="row">
+                <div class="col-md-12" style="margin-bottom: 0!important;">
+                  <div class="row">
+                    <div class="col-md-6">
+                     <h6>Region : {{startInfo.region}}&nbsp;&nbsp;&nbsp;Cluster : {{startInfo.cluster}} &nbsp;&nbsp;&nbsp; Site : {{startInfo.site}}</h6> 
+                    </div>
+                 
+                  
+      
+                  <div class="col-md-6">
+                    <div class="example-button-row float-end">
+                      <button mat-raised-button  color="danger" (click)="GoBackToList()">
+                        <mat-icon class="col-white" class="m-r-10">arrow_back_ios</mat-icon>Back
+                      </button>
+                      <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                        Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item matTooltip="XLSX"
+                        (click)="Export()"    >
+                          <img src="assets/images/icons/xlsx.png" alt="">
+                          <span class="ms-1">Download Excel</span>
+                        </button>
+                      </mat-menu>
+                      <button mat-raised-button color="primary" (click)="addNewPhase()" tabindex="-1">Add phase</button>
+                     
+                  </div>
+                   </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <div *ngIf="isTableLoading" class="tbl-spinner">
+            <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+  
+
+          <mat-accordion multi class="example-headers-align ">
+            <mat-expansion-panel hideToggle *ngFor="let phase of ProjectPlanTaskList| unique2:'phaseId' let i = index" [expanded]="true" class="mb-2">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+               
+                      <h6>{{phase.phasetitle}}</h6>
+                
+              </mat-panel-title>
+                <mat-panel-description>
+                  <div class="col-md-3 col-3 ms-2 me-2 mt-2">
+                    <h6> Weightage: {{ phase.phaseweightage |number: '1.1-2' }} %</h6> 
+                  </div>
+                  <div class="col-md-3 col-3 ms-2 me-2 mt-2">
+                    <h6>Ideal: {{phase.totalIdealScore |number: '1.1-2'}}</h6>
+                </div>
+                <div class="col-md-2 col-2 ms-2 me-2 mt-2">
+                  <h6>Actual: {{phase.totalActualScore |number: '1.1-2'}}</h6>
+                </div>
+                <div class="col-md-2 col-2 ms-2 me-2 mt-2">
+                  <h6>Element: {{phase.elementScore |number: '1.1-2'}}</h6>
+                </div>
+                
+                <div class="col-md-1 col-1 col-xs-1 col-sm-1 ">
+                  <div class="float-end">
+                        <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    
+                    <button mat-menu-item  (click)="addtask(phase)">
+                      Add Task</button>
+                    <button mat-menu-item  (click)="Editphase(phase)">
+                     Edit Phase</button>
+                    
+                    <button mat-menu-item (click)="deletephase(phase)" >
+                      Delete Phase</button> 
+
+                  </mat-menu>
+                  </div>
+                </div>
+                </mat-panel-description>  
+              </mat-expansion-panel-header>
+              <div class="row mb-4">
+                <div class="col-md-12 col-12 col-xs-12 col-sm-12 table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                      <tr style="font-size: small !important;">
+                        <th scope="col" > #</th>
+                        <th scope="col" >Task</th>
+                        <th scope="col" >Ideal Score</th>
+                        <th scope="col">Actual Score</th>
+                        <!-- <th scope="col" >Element Score</th> -->
+                        <th scope="col" >Responsibility</th>
+                        <th scope="col" style="white-space: nowrap;">Target date</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let desc of ProjectPlanTaskList| filterBy: 'phaseId': phase.phaseId let i = index">
+                        <ng-container *ngIf="desc.taskId!=-1">
+                          <tr style="font-size: small !important;">
+                          <td>{{i+1}}</td>
+                          <td >
+                                {{ desc.tasktitle }} 
+                         
+                        </td>
+
+                        <td class="text-center">
+                          {{ desc.idealScore }} 
+                          
+                      </td>
+                        <td class="text-center">
+                          {{ desc.actualScore }} 
+                      </td>
+                          
+                      <!-- <td class="text-center">
+                        0
+                        
+                  </td> -->
+                  <td>
+  
+                    {{desc.username}}
+                  </td>
+                  <td>
+  
+                    {{desc.targetdate |date}}
+                  </td>
+                          <td>
+                            <div class="float-end">     
+                              <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                <mat-icon>more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                              <button mat-menu-item (click)="uploadEvidence(desc)">
+                               Upload Document
+                                </button>
+                                <button mat-menu-item  (click)="Edittask(desc)">
+                                 Edit Task</button>
+                                
+                                <button mat-menu-item (click)="deletetask(desc)" >
+                                  Delete Task</button> 
+            
+                              </mat-menu>
+                            </div>
+                          </td>
+                          </tr>
+                             </ng-container>
+                      </ng-container>
+                   </tbody>
+                  </table>
+                </div>
+             </div>
+            </mat-expansion-panel>
+          </mat-accordion>    
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  
+
+  
+  

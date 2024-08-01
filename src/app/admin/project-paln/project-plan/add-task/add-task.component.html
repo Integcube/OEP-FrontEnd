@@ -1,0 +1,525 @@
+<style>
+    .table tbody tr td, .table tbody tr th {
+    padding: 7px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-table td, .mat-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.mat-table th {
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.sub1{
+  padding-left: 10px !important;
+}
+.sub2{
+  padding-left: 15px !important;
+}
+.sub3{
+  padding-left: 30px !important;
+}
+
+.sub4{
+  padding-left: 40px !important;
+}
+
+h4, .h4 {
+        font-size: 1.3rem!important
+    }
+
+    h5, .h5 {
+    font-size: 1.15rem!important;
+}
+.lasttext {
+    font-size: 0.8rem!important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+     margin: 0px!important;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0px!important;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0!important;
+  }
+  .table tbody tr td, .table tbody tr th {
+      padding: 5px!important;
+  }
+</style>
+
+<section class="content mb-4">
+    <div class="content-block mb-4">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Project Planing'" [items]="[]" [active_item]="'Add Task'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card" style="margin-bottom: 8px!important">
+            <div class="body">
+              <div class="row">
+                <div class="col-md-12" style="margin-bottom: 0!important;">
+                  <div class="row">
+                    <div class="col-md-6">
+                    <h6>Region : {{startInfo.region}}&nbsp;&nbsp;&nbsp;Cluster : {{startInfo.cluster}} &nbsp;&nbsp;&nbsp; Site : {{startInfo.site}}</h6>
+                    </div>
+                 
+                  
+      
+                  <div class="col-md-6">
+                    <div class="example-button-row float-end">
+                      <button mat-raised-button  color="danger" (click)="GoBackToList()">
+                        <mat-icon class="col-white" class="m-r-10">arrow_back_ios</mat-icon>Back
+                      </button>
+                      <button mat-raised-button color="download" [matMenuTriggerFor]="menu">
+                        Export<mat-icon>keyboard_arrow_down</mat-icon></button>
+                      <mat-menu #menu="matMenu">
+                        <button mat-menu-item matTooltip="XLSX"
+                        (click)="Export()"    >
+                          <img src="assets/images/icons/xlsx.png" alt="">
+                          <span class="ms-1">Download Excel</span>
+                        </button>
+                      </mat-menu>
+                      <button mat-raised-button color="primary" (click)="addNewPhase()" tabindex="-1">Add phase</button>
+                      <button mat-raised-button color="primary"   (click)="saveAssignTasks()" >Save</button>
+                    
+                  </div>
+                    <!-- <div class="m-l-10" matTooltip="Add new Phase below">
+                      <button mat-raised-button color="primary" (>
+                        <mat-icon class="col-white"  class="m-r-10">add</mat-icon>Phase 
+                      </button>
+                    </div>
+                    <div   matTooltip="Add new task">
+                     <button mat-raised-button color="primary">
+      
+                      <mat-icon class="col-white"   class="m-r-10">save</mat-icon>Save
+                     </button>
+                     
+                     </div> -->
+                   </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+          </div>
+
+          <div *ngIf="isTableLoading" class="tbl-spinner">
+            <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+  
+
+          <mat-accordion multi class="example-headers-align ">
+            <mat-expansion-panel hideToggle *ngFor="let phase of ProjectPlanTaskList| unique2:'phaseId' let i = index" [expanded]="true" class="mb-2">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+               
+                      <h6>{{phase.phaseTitle}}</h6>
+                 
+              </mat-panel-title>
+                <mat-panel-description>
+                  <div class="col-md-5 col-5 ms-2 me-2 mt-2">
+                    <ng-container >
+                      <h6>{{ phase.phaseStartDate|date }}&nbsp;&nbsp;-&nbsp;&nbsp;{{ phase.phaseEndDate|date }}</h6> 
+                    </ng-container >
+                </div>
+                <div class="col-md-3 col-3 ms-2 me-2 mt-2">
+                  <h6>  Duration: {{phase.phaseDuration}} days </h6> 
+                </div>
+                <div class="col-md-2 col-2 ms-2 me-2 mt-2">
+                  <h6> Weightage:{{ phase.phaseWeightage }} %</h6> 
+                </div>
+                <div class="col-md-1 col-1 col-xs-1 col-sm-1 ">
+                  <div class="float-end">
+                        <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    
+                    <button mat-menu-item  (click)="addtask(phase)">
+                      Add Task</button>
+                    <button mat-menu-item  (click)="Editphase(phase)">
+                     Edit Phase</button>
+                    
+                    <button mat-menu-item (click)="deletephase(phase)" >
+                      Delete Phase</button> 
+
+                  </mat-menu>
+                  </div>
+                </div>
+                </mat-panel-description>  
+              </mat-expansion-panel-header>
+              <div class="row mb-4">
+                <div class="col-md-12 col-12 col-xs-12 col-sm-12">
+                <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th scope="col" width="5%"> #</th>
+                        <th scope="col" width="5%">Code</th>
+                        
+                        <th scope="col"  width="75%" >Task</th>
+                        <th scope="col" style="width: 10%!important">Predecessor/lagDays</th>
+                        <th scope="col" width="10%" style="width: 10%!important">Duration</th>
+                        <th scope="col" width="10%" style="width: 10%!important"></th>
+                        <th scope="col" width="10%" style="width: 10%!important"></th>
+                        <th scope="col"  width="10%" >Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let desc of ProjectPlanTaskList| filterBy: 'phaseId': phase.phaseId let i = index">
+                        <ng-container *ngIf="desc.level == 0 && desc.taskId!=-1">
+                          <tr>
+                          <td><h5 style="font-size: 1.3rem!important">{{i+1}}</h5></td>
+                          <td style=" padding-left: 0px !important">
+                            <ng-container *ngIf="desc.isChild == 1; else noChildcode">
+                                <h5>{{desc.code}}</h5>
+                              </ng-container>
+                              <ng-template #noChildcode>
+                                {{ desc.code }} 
+                              </ng-template>
+                        </td>
+                          <td style=" padding-left: 0px !important">
+                            <ng-container *ngIf="desc.isChild == 1; else noChild">
+                                <h5>{{desc.title}}</h5>
+                              </ng-container>
+                              <ng-template #noChild>
+                                {{ desc.title }} 
+                              </ng-template>
+                        </td>
+
+                        <td style=" padding-left: 0px !important">
+                          <ng-container *ngIf="desc.isChild == 1; else noChildpredecessor">
+                              <h5 *ngIf="desc.predecessorId !== -1;" >{{desc.predecessor}}/{{desc.lagDaysWithunit}} </h5>
+                            </ng-container>
+                            <ng-template #noChildpredecessor>
+                              <ng-container *ngIf="desc.predecessorId !== -1;">    
+                                 {{desc.predecessor}}/{{desc.lagDaysWithunit}}        
+                                
+                              </ng-container>
+                              </ng-template>
+                      </td>
+                        <td style=" padding-left: 0px !important">
+                          <ng-container *ngIf="desc.isChild == 1; else noChilddays">
+                            
+                            </ng-container>
+                            <ng-template #noChilddays>
+                              {{desc.durationWithunit}}
+                            </ng-template>
+                      </td>
+                          
+                      <td>
+                        <mat-form-field *ngIf="desc.isChild == 0;" class="example-full-width" appearance="outline" style="width: 130px;">
+                         
+                          <input matInput [matDatepicker]="picker3" ngDefaultControl   [(ngModel)]="desc.taskAssignmentStartDate" (dateChange)="UpdateTaskDatesOnChangeOftask(desc, 'start')">
+                          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                          <mat-datepicker #picker3></mat-datepicker>
+                        </mat-form-field>
+                        <h5 *ngIf="desc.isChild == 1;"> {{ desc.taskAssignmentStartDate|date }}</h5>   
+                  </td>
+                  <td>
+                      <mat-form-field class="example-full-width" *ngIf="desc.isChild == 0;" appearance="outline" style="width: 130px;">
+                          
+                          <input matInput [matDatepicker]="picker4" ngDefaultControl [(ngModel)]="desc.taskAssignmentEndDate" (dateChange)="UpdateTaskDatesOnChangeOftask(desc, 'end')">
+                          <mat-datepicker-toggle matSuffix [for]="picker4"></mat-datepicker-toggle>
+                          <mat-datepicker #picker4></mat-datepicker>
+                        </mat-form-field>
+                        <h5 *ngIf="desc.isChild == 1;"> {{ desc.taskAssignmentEndDate|date }}</h5>   
+
+                  </td>
+                  
+                          <td>
+                            <div class="float-end">
+                              <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                <mat-icon>more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                              <button mat-menu-item  (click)="AddSubTask(desc)">
+                                Add Sub Task
+                                </button>
+                                <button mat-menu-item  (click)="Edittask(desc)">
+                                 Edit Task</button>
+                                
+                                <button mat-menu-item (click)="deleteSubTask(desc)" >
+                                  Delete Task</button> 
+            
+                              </mat-menu>
+                            </div>
+                          </td>
+                          </tr>
+                             </ng-container>
+                        <ng-container *ngFor="let sub of ProjectPlanTaskList | filterBy: 'taskParentId': desc.taskId let j = index">
+                            <ng-container *ngIf="sub.level==1">
+                            <ng-container >
+                              <tr>
+                                <th scope="row">{{i+1}}.{{ j + 1 }}</th>
+                                
+                                <td class="sub1"><h5>{{ sub.code }}</h5></td>
+                                <td class="">
+                                  <ng-container *ngIf="sub.isChild == 1; else noChildsub">
+                                    <h5>{{ sub.title }}</h5>
+                                  </ng-container>
+                                  <ng-template #noChildsub>
+                                    {{ sub.title }} 
+                                  </ng-template>
+                                 
+                                
+                                </td>
+                                 <td> 
+                                   
+                                     <ng-container *ngIf="sub.isChild == 1; else noChildlagDaysWithunit">
+                                      <h5 *ngIf="sub.predecessorId !== -1;" >{{sub.predecessor}}/{{sub.lagDaysWithunit}}</h5>
+                                    </ng-container>
+                                    <ng-template #noChildlagDaysWithunit>
+                                      <span *ngIf="sub.predecessorId !== -1;" >{{sub.predecessor}}/{{sub.lagDaysWithunit}}</span> 
+                                    </ng-template>
+                                </td>
+                                <td>
+                                  <ng-container *ngIf="sub.isChild == 0;">
+                                  {{ sub.durationWithunit }}
+                                </ng-container>
+                                </td>
+                                <td>
+                                  <h5 *ngIf="sub.isChild == 1;"> {{ sub.taskAssignmentStartDate|date }}</h5>  
+                                  <mat-form-field class="example-full-width"  *ngIf="sub.isChild == 0;" appearance="outline"  style="width: 130px;">
+                                    <mat-label>Start Date</mat-label>
+                                    <input matInput [matDatepicker]="picker5" ngDefaultControl   [(ngModel)]="sub.taskAssignmentStartDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub, 'start')">
+                                    <mat-datepicker-toggle matSuffix [for]="picker5"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker5></mat-datepicker>
+                                  </mat-form-field>
+                            </td>
+                            <td>
+                              <h5 *ngIf="sub.isChild == 1;"> {{ sub.taskAssignmentEndDate|date }}</h5>  
+                                <mat-form-field class="example-full-width"  *ngIf="sub.isChild == 0;" appearance="outline"  style="width: 130px;" >
+                                    <mat-label>End Date</mat-label>
+                                    <input matInput [matDatepicker]="picker6" ngDefaultControl [(ngModel)]="sub.taskAssignmentEndDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub, 'end')">
+                                    <mat-datepicker-toggle matSuffix [for]="picker6"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker6></mat-datepicker>
+                                  </mat-form-field>
+                            </td>
+                               <td>            
+                                <div class="float-end">
+                              <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                <mat-icon>more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                              <button mat-menu-item  (click)="AddSubTask(sub)">
+                                Add Sub Task
+                                </button>
+                                <button mat-menu-item (click)="EditSubTask(sub)" >
+                                 Edit Task</button>
+                                <button mat-menu-item (click)="deleteSubTask(sub)" >
+                                  Delete Task</button> 
+                              </mat-menu>
+                            </div>
+                        </td>
+                              </tr>
+                            </ng-container>
+                           </ng-container>
+                        
+                              <ng-container *ngFor="let sub2 of ProjectPlanTaskList | filterBy: 'taskParentId': sub.taskId  let p = index">
+                                <tr *ngIf="sub2.level == 2">
+                                    <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}</th>
+                                    <td class="sub2">
+                                      <ng-container *ngIf="sub2.isChild == 1; else noChildsub2">
+                                        <h6>{{ sub2.code }}</h6>
+                                      </ng-container>
+                                      <ng-template #noChildsub2>
+                                        {{ sub2.code }}
+                                      </ng-template>
+                                      
+
+                                    </td>
+                                    <td>
+                                      <ng-container *ngIf="sub2.isChild == 1; else noChildsub2title">
+                                        <h6>{{ sub2.title }}</h6>
+                                      </ng-container>
+                                      <ng-template #noChildsub2title>
+                                        {{ sub2.title }}
+                                      </ng-template>
+                                      
+                                    </td>
+                                    <td>
+                             
+                                    <ng-container *ngIf="sub2.isChild == 1; else nolagDaysWithunit">
+                                      <h6 *ngIf="sub2.predecessorId !== -1;" >
+
+                                        {{sub2.predecessor}}/{{sub2.lagDaysWithunit}}
+                                      </h6>
+                                    </ng-container>
+                                    <ng-template #nolagDaysWithunit>
+                                      {{sub2.predecessor}}/{{sub2.lagDaysWithunit}}
+                                    </ng-template>
+                                    </td> 
+                                    <td>
+                                      <ng-container *ngIf="sub2.isChild == 0;">
+                                       {{sub2.durationWithunit }} 
+                                      </ng-container>
+                           
+
+                                    </td>
+                                    <td>
+                                      <h6 *ngIf="sub2.isChild == 1;"> {{ sub2.taskAssignmentStartDate|date }}</h6>  
+                                      <mat-form-field class="example-full-width"  *ngIf="sub2.isChild == 0;" appearance="outline"  style="width: 130px;">
+                                        <mat-label>Start Date</mat-label>
+                                        <input matInput [matDatepicker]="picker7" ngDefaultControl   [(ngModel)]="sub2.taskAssignmentStartDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub2, 'start')">
+                                        <mat-datepicker-toggle matSuffix [for]="picker7"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker7></mat-datepicker>
+                                      </mat-form-field>
+                                </td>
+                                <td>
+                                  <h6 *ngIf="sub2.isChild == 1;"> {{ sub2.taskAssignmentEndDate|date }}</h6>  
+                                    <mat-form-field class="example-full-width" *ngIf="sub2.isChild == 0;" appearance="outline"  style="width: 130px;">
+                                        <mat-label>End Date</mat-label>
+                                        <input matInput [matDatepicker]="picker8" ngDefaultControl [(ngModel)]="sub2.taskAssignmentEndDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub2, 'end')">
+                                        <mat-datepicker-toggle matSuffix [for]="picker8"></mat-datepicker-toggle>
+                                        <mat-datepicker #picker8></mat-datepicker>
+                                      </mat-form-field>
+                                </td>
+                                   
+                                    <td>            
+                                        <div class="float-end">
+                                      <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                        <mat-icon>more_vert</mat-icon>
+                                      </button>
+                                      <mat-menu #menu="matMenu">
+                                      <button mat-menu-item (click)="AddSubTask(sub2)">
+                                         New Task
+                                        </button>
+                                        <button mat-menu-item  (click)="EditSubTask(sub2)">
+                                         Edit Task</button>
+                                        
+                                        <button mat-menu-item (click)="deleteSubTask(sub2)">
+                                          Delete Task</button> 
+                    
+                                      </mat-menu>
+                                    </div>
+                                </td>
+                                  </tr>
+
+
+                                  <ng-container *ngFor="let sub3 of ProjectPlanTaskList | filterBy: 'taskParentId': sub2.taskId  let p3 = index">
+                                    <tr *ngIf="sub3.level == 3">
+                                        <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}</th>
+                                        <td  class="sub3">{{ sub3.code }}</td>
+                                        <td>{{ sub3.title }}</td>
+                                         <td >  <ng-container *ngIf="sub3.predecessorId !== -1;" >{{sub3.predecessor}}/{{sub3.lagDaysWithunit}}</ng-container > </td>
+                                        <td >{{ sub3.durationWithunit }}</td>
+                                        <td>
+                                          <ng-container *ngIf="sub3.isChild == 1;">
+                                            {{ sub3.taskAssignmentStartDate|date }}
+                                           </ng-container>
+                                       
+                                          <mat-form-field class="example-full-width" *ngIf="sub3.isChild == 0;" appearance="outline"  style="width: 130px;">
+                                            <mat-label>Start Date</mat-label>
+                                            <input matInput [matDatepicker]="picker9" ngDefaultControl   [(ngModel)]="sub3.taskAssignmentStartDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub3, 'start')">
+                                            <mat-datepicker-toggle matSuffix [for]="picker9"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker9></mat-datepicker>
+                                          </mat-form-field>
+                                    </td>
+                                    <td>
+                                      <ng-container *ngIf="sub3.isChild == 1;">
+                                        {{ sub3.taskAssignmentEndDate|date }}
+                                       </ng-container>
+                                        <mat-form-field class="example-full-width" *ngIf="sub3.isChild == 0;" appearance="outline"  style="width: 130px;">
+                                            <mat-label>End Date</mat-label>
+                                            <input matInput [matDatepicker]="picker10" ngDefaultControl [(ngModel)]="sub3.taskAssignmentEndDate"  (dateChange)="UpdateTaskDatesOnChangeOftask(sub3, 'end')">
+                                            <mat-datepicker-toggle matSuffix [for]="picker10"></mat-datepicker-toggle>
+                                            <mat-datepicker #picker10></mat-datepicker>
+                                          </mat-form-field>
+                                    </td>
+                                        
+                                        <td>            
+                                            <div class="float-end">
+                                          <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                            <mat-icon>more_vert</mat-icon>
+                                          </button>
+                                          <mat-menu #menu="matMenu" >
+                                          <button mat-menu-item (click)="AddSubTask(sub3)">
+                                            New Task
+                                            </button>
+                                            <button mat-menu-item  (click)="EditSubTask(sub3)">
+                                             Edit Task</button>
+                                            
+                                            <button mat-menu-item (click)="deleteSubTask(sub3)">
+                                              Delete Task</button> 
+                        
+                                          </mat-menu>
+                                        </div>
+                                    </td>
+                                      </tr>
+    
+                                      <ng-container *ngFor="let sub4 of ProjectPlanTaskList | filterBy: 'taskParentId': sub3.taskId  let p4 = index">
+                                        <tr *ngIf="sub4.level == 4" >
+                                            <th scope="row lasttext">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}.{{ p4 + 1 }}</th>
+                                            <td class="sub4 lasttext">{{ sub4.code }}</td>
+                                            <td class="lasttext">{{ sub4.title }}</td>
+                                             <td class="lasttext"><ng-container *ngIf="sub4.predecessorId !== -1;" >{{sub4.predecessor}}/{{sub4.lagDaysWithunit}}</ng-container ></td> 
+                                            <td class="lasttext">{{ sub4.durationWithunit }}</td>
+                                            <td>
+                                              <mat-form-field class="example-full-width"  appearance="outline"  style="width: 130px;">
+                                                <mat-label>Start Date</mat-label>
+                                                <input matInput [matDatepicker]="picker11" ngDefaultControl   [(ngModel)]="sub4.taskAssignmentStartDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub4, 'start')">
+                                                <mat-datepicker-toggle matSuffix [for]="picker11"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker11></mat-datepicker>
+                                              </mat-form-field>
+                                        </td>
+                                        <td>
+                                            <mat-form-field class="example-full-width"   appearance="outline"  style="width: 130px;">
+                                                <mat-label>End Date</mat-label>
+                                                <input matInput [matDatepicker]="picker12" ngDefaultControl [(ngModel)]="sub4.taskAssignmentEndDate" (dateChange)="UpdateTaskDatesOnChangeOftask(sub4, 'end')">
+                                                <mat-datepicker-toggle matSuffix [for]="picker12"></mat-datepicker-toggle>
+                                                <mat-datepicker #picker12></mat-datepicker>
+                                              </mat-form-field>
+                                        </td>
+                                            <td class="lasttext">            
+                                                <div class="float-end">
+                                              <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                                <mat-icon>more_vert</mat-icon>
+                                              </button>
+                                              <mat-menu #menu="matMenu">
+                                             
+                                                <button mat-menu-item  (click)="EditSubTask(sub4)">
+                                                 Edit Task</button>
+                                                
+                                                <button mat-menu-item (click)="deleteSubTask(sub4)">
+                                                  Delete Task</button> 
+                                              </mat-menu>
+                                            </div>
+                                        </td>
+                                          </tr>
+                                      </ng-container>
+                                  </ng-container>
+                              </ng-container> 
+                          </ng-container>
+                      </ng-container>
+                   </tbody>
+                  </table>
+                </div>
+             </div>
+            </mat-expansion-panel>
+          </mat-accordion>    
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  
+
+  
+  

@@ -2,7 +2,8 @@ export interface WH_ProposedOutageFilter{
     regionId:number;
     siteId:number;
     equipmentId:number;
-    outageId:number
+    outageId:number,
+    clusterId:number
 }
 
 export class OT_SiteNextOutage {

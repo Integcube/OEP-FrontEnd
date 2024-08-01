@@ -42,6 +42,13 @@ const routes: Routes = [
     loadChildren:()=>
     import('./working-hours/working-hours.module').then((m)=>m.WorkingHoursModule)
   },
+  {
+    path:'project-plan',
+    loadChildren:()=>
+    import('./project-paln/project-plan.module').then((m)=>m.ProjectPlanModule)
+  },
+  
+
 
 ];
 

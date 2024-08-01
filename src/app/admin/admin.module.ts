@@ -10,6 +10,7 @@ import { ComponentsModule } from "../shared/components/components.module";
 
 @NgModule({
   declarations: [
+  
   ],
   imports: [
     CommonModule,

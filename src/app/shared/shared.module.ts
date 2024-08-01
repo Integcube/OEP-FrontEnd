@@ -16,6 +16,9 @@ import { RoundedNumberPipe } from "../_pipes/RoundedNumberPipe.pipe";
 import { UniquePipe2 } from "../_pipes/unique.pipe copy";
 import { TilExcludePipe } from "../_pipes/TilsExcludePipe";
 import { OTNameRemoverPipe } from "../_pipes/otNameRemover.pipe";
+import { FilterByPipe } from "../_pipes/filterBy.Pipe";
+import { filterOnObjBase } from "../_pipes/filterOnObjBase.Pipe";
+import { OrderByPipe } from "../_pipes/orderby.pipe";
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -30,7 +33,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     RoundedNumberPipe,
     UniquePipe2,
     TilExcludePipe,
-    OTNameRemoverPipe
+    OTNameRemoverPipe,
+    FilterByPipe,
+    filterOnObjBase,
+    OrderByPipe
   ],
   imports: [
     CommonModule,
@@ -59,7 +65,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     MonthNamePipe,
     RoundedNumberPipe,
     TilExcludePipe,
-    OTNameRemoverPipe
+    OTNameRemoverPipe,
+    FilterByPipe,
+    filterOnObjBase,
+    OrderByPipe
   ],
 })
 export class SharedModule {}
