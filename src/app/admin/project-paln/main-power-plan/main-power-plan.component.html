@@ -1,0 +1,290 @@
+<style>
+
+  .sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000; /* Adjust z-index as needed */
+    background-color: white; /* Ensure background color matches your design */
+  }
+  .sticky-column {
+    position: sticky;
+    left: 0;
+    z-index: 1000; /* Ensure the z-index is higher than the regular table cells */
+    background-color: #f5f5f5; /* Match background color with the table header */
+  }
+
+  .no-border {
+  border: none;
+  outline: none;
+}
+
+.change-color-on-focus:focus {
+  background-color: rgb(247, 247, 221); 
+
+}
+.table > :not(caption) > * > * {
+    padding: 0.4rem 0.4rem!important;
+    FONT-SIZE:small!important;
+}
+
+.table-bordered {
+    border-top: 1px solid #eee;
+    FONT-SIZE:small!important;
+}
+
+.date-column {
+  width: 200px!important; /* Set your desired width */
+  white-space: nowrap;
+}
+
+.form-control {
+    display: block;
+    width: 100%!important;
+    padding: 0.2rem 0.2rem!important;
+    border-bottom: none!important;
+    border-top: none!important;
+}
+
+  .inline-inputs {
+    display: inline-block;
+    width: 50%;
+  }
+
+
+</style>
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Manpower Plan'" [items]="[]" ></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row ms-2 me-2 mt-2">
+                  <!-- <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>ECOD</mat-label>
+                        <input matInput [matDatepicker]="ECODDate" ngDefaultControl    [(ngModel)]="KeyIssues.Date"  (dateChange)="GetManpowerPlan('1')">
+                        <mat-datepicker-toggle matSuffix [for]="ECODDate"></mat-datepicker-toggle>
+                        <mat-datepicker #ECODDate></mat-datepicker>
+                      </mat-form-field>
+                  </div>  -->
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Month</mat-label>
+                      <mat-select   ngDefaultControl [(ngModel)]="SelectedMonth" (selectionChange)="filterOnMonth(SelectedMonth)"> 
+                        <mat-option  [value]="-1">--All Months--</mat-option>
+                        <mat-option *ngFor="let s of Yearlist" [value]="s.value">{{s.title}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-3 mt-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Sites</mat-label>
+                      <mat-select   ngDefaultControl [(ngModel)]="KeyIssues.siteId" (selectionChange)="GetManpowerPlan('2')"> 
+                        <mat-option *ngFor="let s of sites" [value]="s.siteId">{{s.siteTitle}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-md-1">
+                   
+                    <div class="mt-4 mb-3 ">
+                      <button mat-raised-button color="success" (click)="GetManpowerPlan('2')"> 
+                        <mat-icon>refresh</mat-icon>
+                        Refresh</button>
+                     
+                     
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                   
+                    <div class="mt-4 mb-3 m-l-20">
+                      <button mat-raised-button color="primary" (click)="SaveManPowerPlan()"> Save
+
+                      </button>
+                     
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+        
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="col-md-12 mb-2 " style="margin-top: -15px !important;">
+      <mat-accordion class="example-headers-align ">
+
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>Milestones</mat-panel-title>
+            <mat-panel-description>
+              
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+       
+          <div class="row mb-4">
+            <div class="col-md-12 col-12 col-xs-12 col-sm-12">
+            <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col" width="5%"> #</th>
+                    
+                    <th scope="col"  width="75%" >Title</th>
+                    <th scope="col" width="10%" style="width: 10%!important">Start Date</th>
+                    <th scope="col" width="10%" style="width: 10%!important">End Date</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let desc of MilstoneList  let i = index">
+                    <ng-container>
+                      <tr>
+                      <td>{{i+1}}</td>
+               
+                      <td style=" padding-left: 0px !important">
+                       
+                          
+                            {{ desc.title }} 
+                         
+                    </td>
+                    <td style=" padding-left: 0px !important">
+                       
+                   
+                        {{ desc.startDate |date}} 
+                      
+                </td>
+                <td style=" padding-left: 0px !important">
+                 
+                    {{ desc.endDate|date }} 
+                  
+            </td>
+            
+                      </tr>
+                         </ng-container>
+                   
+                  </ng-container>
+               </tbody>
+              </table>
+            </div>
+         </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+    <div class="card">
+        <div class="body">
+          <div class="table-responsive" style="height: 56vh">
+            <div *ngIf="isTableLoading" class="tbl-spinner">
+              <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+              </mat-progress-spinner>
+            </div>
+            <ng-container *ngIf="!isTableLoading">
+            <table class="table  table-bordered" >
+                <thead class="sticky-header">
+                  <tr>
+                    <th scope="col" class="sticky-column">#</th>
+                    <th scope="col">Actions</th>
+                    <th scope="col"  class="sticky-column" style="white-space: nowrap;">Payroll Positions</th>
+                    <th scope="col" style="white-space: nowrap;">Local/Expat.&nbsp;&nbsp;&nbsp;&nbsp;
+                    </th>
+                    <th scope="col" style="white-space: nowrap;">Appro. Manpower 
+                    </th>
+                    <th scope="col" style="white-space: nowrap;">Employee Names&nbsp;&nbsp;&nbsp;&nbsp;
+                    </th>
+                
+                  <ng-container *ngFor="let dateItem of filteredManPowerList | filterBy: 'ishow': 1 | unique2: 'date' |orderBy: 'date': 'asc'">
+                 
+                    <th scope="col" class="date-column text-center" style="white-space: nowrap;" >
+                     {{ dateItem.date| date: 'MMM-yyyy' }}<br>
+                      <span style="font-size: x-small;">Planed/Actual</span>
+                    </th>
+                  </ng-container>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr  *ngFor="let pos of filteredManPowerList | filterBy:  'ishow': 1  | unique2: 'positionId' let i = index" >
+                    <td  class="sticky-column" scope="row">{{ i + 1 }}</td>
+                    <td style="white-space:nowrap;">
+                      <button mat-icon-button (click)="$event.stopPropagation()"  style="width: 30px!Important" (click)="removePosition(pos.positionId)"
+                      class="tbl-action-btn" matTooltip="DELETE">
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'"></app-feather-icons>
+                    </button>
+                    <button mat-icon-button (click)="$event.stopPropagation()" style="width: 30px!Important"  (click)="addPosition(pos.positionId)" color="primary"
+                                              matTooltip="Add new Position below"
+                                              aria-label="Example icon button with a menu icon">
+                      <mat-icon>add_circle</mat-icon>
+                    </button> 
+                      
+                    </td>
+                    <td  class="sticky-column" style="white-space: nowrap;">
+                      <textarea cols="2" class="no-border change-color-on-focus form-control" placeholder="Write Position Name" style="width: 250px!important;" type="text" [(ngModel)]="pos.title"  (ngModelChange)="onTitleChange(pos.positionId, $event)" ></textarea>
+                     
+                    </td>
+                    <td style="padding: none;">
+          
+                       <select class="no-border form-select" style="width: 100px!important;" [(ngModel)]="pos.positionType" (ngModelChange)="pos.positionType = +$event">
+                      <option [value]="1">Local</option>
+                      <option [value]="2">Expat</option>
+                      <option [value]="3">Remote</option>
+                    </select>
+                  </td>
+                    <td>
+                      <input class="no-border change-color-on-focus form-control" type="number"  [(ngModel)]="pos.approvedManpower" (ngModelChange)="onApprovedChange(pos.positionId, $event)">
+                    </td> 
+                    <td style="padding: none;">
+          
+                     <textarea cols="2" class="no-border change-color-on-focus form-control" [(ngModel)]="pos.peopleName"  style="width: 250px!important;" placeholder="Write people's names separated with a comma..."  [(ngModel)]="pos.peopleName" (ngModelChange)="onPeopleChange(pos,$event.target.value)" ></textarea>
+                 </td>
+                      <td class="text-center" *ngFor="let data of filteredManPowerList | filterOnObjBase: { positionId: pos.positionId,ishow: 1 }|orderBy: 'date': 'asc'">
+                        <div class="d-flex justify-content-between" style="gap: 5px;">
+                          <input class="change-color-on-focus form-control"  type="number" [(ngModel)]="data.numberOfPosition" placeholder="Planed" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')" style="width: 70px!important;background-color: #eee">
+                          <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPositionActual" placeholder="Actual" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPositionActual')" style="width: 70px!important;    background-color: #beffe1;">
+                        </div>
+                        <!-- <input class="change-color-on-focus form-control" style="width: 5px;" type="number" [(ngModel)]="data.numberOfPosition" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')"> <input class=" change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPosition" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')"> -->
+                      </td>
+                  </tr> 
+
+
+                </tbody>
+       <tfoot>
+         <!-- Separate list for positionId 999999999 -->
+  <tr *ngFor="let pos of specialManPowerList| filterBy:  'ishow': 1 | unique2: 'positionId'; let i = index">
+    <td class="sticky-column" scope="row"></td>
+    <td style="white-space:nowrap;">
+    
+    </td>
+    <td class="sticky-column" style="white-space: nowrap;">
+     <strong>{{pos.title}} </strong> 
+    </td>
+    <td style="padding: none;">
+   
+    </td>
+    <td>
+      {{pos.approvedManpower}} 
+    </td>
+    <td style="padding: none;">
+      
+    </td>
+    <td class="text-center" *ngFor="let data of specialManPowerList| filterOnObjBase: { positionId: pos.positionId,ishow: 1} | orderBy: 'date': 'asc'">
+      <div class="d-flex justify-content-between" style="gap: 5px;">
+        <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPosition" placeholder="Planned" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')" style="width: 70px!important;" disabled>
+        <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPositionActual" placeholder="Actual" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPositionActual')" style="width: 70px!important;" disabled>
+      </div>
+    </td>
+  </tr>
+       </tfoot>
+              </table>
+            </ng-container>
+            </div>
+          
+</div>
+</div>
+  
+
+</div>
+</section>
+

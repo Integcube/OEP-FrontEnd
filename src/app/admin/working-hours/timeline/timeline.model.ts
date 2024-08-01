@@ -57,6 +57,7 @@ export interface GroupedHoursItems {
     startHoursWce,
     wceRunningHour,
     eqType,
+    fromCoe,
 }
 export interface GroupedOutges {
     equipmentId,

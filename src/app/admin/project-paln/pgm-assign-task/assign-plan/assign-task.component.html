@@ -1,0 +1,328 @@
+<style>
+:host ::ng-deep .mat-form-field-wrapper{
+  margin: 0 !important;
+  padding: 0!important;
+}
+
+</style>
+<section class="content">
+    <div class="content-block">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Start Plan'" [items]="[]" [active_item]="'Assign Task'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row ms-2 me-2 mt-4">
+                  
+                  <div class="col-md-9">
+                    <h6>Region : {{startInfo.region}}&nbsp;&nbsp;&nbsp;Cluster : {{startInfo.cluster}} &nbsp;&nbsp;&nbsp; Site : {{startInfo.site}}</h6>
+                    </div>
+                  <div class="col-md-1">
+                    <div class=" mb-3 float-end">
+                      <button mat-raised-button  color="primary" (click)="GoBackToList()">
+                        <mat-icon class="col-white" class="m-r-10">cancel</mat-icon>Cancel
+                      </button>
+                     
+                     
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                    
+                      <div  matTooltip="Save Data">
+                        <button mat-raised-button  color="primary" (click)="saveAssignTasks()">
+                          <mat-icon class="col-white" class="m-r-10">save</mat-icon>Save
+                        </button>
+                        
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+              
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isTableLoading" class="tbl-spinner">
+        <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+        </mat-progress-spinner>
+      </div>
+
+      <mat-accordion multi class="example-headers-align ">
+        <mat-expansion-panel hideToggle *ngFor="let phase of ProjectPlanTaskList| unique2:'phaseId' let i = index" [expanded]="true" class="mb-2">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+           
+                  <h6 [matTooltip]="phase.duration +' Days'+' Weightage ' +phase.phaseWeightage+' %'">{{phase.phaseTitle}}</h6><br>
+                
+          </mat-panel-title>
+            <mat-panel-description>
+              <ng-container >
+                <div class="row ms-2 me-2 mt-2 mb-2">
+                  <div class="col-md-12 col-12 ms-2 me-2 mt-2">
+                    <ng-container >
+                      <h6>{{ phase.phaseStartDate|date }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{ phase.phaseEndDate|date }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Weightage:{{ phase.phaseWeightage }} %</h6> 
+                    </ng-container > 
+                  </div>
+        </div>
+      </ng-container>
+            </mat-panel-description>  
+          </mat-expansion-panel-header>
+          <div class="row mb-4">
+            <div class="col-md-12 col-12 col-xs-12 col-sm-12 table-responsive">
+            <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col" width="5%">#</th>
+                    <th scope="col" width="55%">Task</th>
+                    
+                    
+                    <th scope="col"  width="10%" >Duration</th>
+                    <th  scope="col"  width="10%" style="white-space:nowrap">
+                    Start Date
+                    </th>
+                    <th  scope="col" width="10%" style="white-space:nowrap" >End Date</th>
+                    <th scope="col" width="10%">
+                      <ng-container  *ngIf="phase.displayOrder !== 1;">
+                     
+                      <mat-form-field class="example-full-width mt-3 mb-2"  appearance="outline" >
+                        <mat-label>PGM/User</mat-label>
+                        <mat-select ngDefaultControl [(ngModel)]="phase.phasePgmId"   (selectionChange)="updateTaskPgms(phase.phaseId, $event.value)"> 
+                          <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </ng-container > 
+
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let desc of ProjectPlanTaskList| filterBy: 'phaseId': phase.phaseId let i = index">
+                    <ng-container *ngIf="desc.level == 0 && desc.taskId!=-1">
+                      <tr>
+                      <td>
+                        <ng-container *ngIf="desc.isChild == 1; else noChildno">
+                            <h5 style="font-size: 1.3rem!important">{{i+1}}</h5>  
+                          </ng-container>
+                          <ng-template #noChildno>
+                            {{i+1}}
+                          </ng-template>
+                    </td>
+                      <td style=" padding-left: 0px !important">
+                        <ng-container *ngIf="desc.isChild == 1; else noChild">
+                            <h5>{{desc.title}}</h5>
+                          </ng-container>
+                          <ng-template #noChild>
+                            {{ desc.title }}
+                          </ng-template>
+                    </td>
+                      <td>
+                        <ng-container *ngIf="desc.isChild == 1; else noChilduration">
+                      
+                          </ng-container>
+                          <ng-template #noChilduration>
+                            {{desc.durationWithunit}}
+                          </ng-template>
+                    </td>
+                    <td style="white-space:nowrap">
+                      <ng-container *ngIf="desc.isChild == 1;">
+                        <h5>{{ desc.taskAssignmentStartDate|date }}</h5>
+                      </ng-container>
+                      <ng-container *ngIf="desc.isChild == 0;">
+                        {{ desc.taskAssignmentStartDate|date }}
+                      </ng-container>
+                    
+                    </td>
+                    <td style="white-space:nowrap"> 
+                      <ng-container *ngIf="desc.isChild == 1;">
+                        <h5>{{ desc.taskAssignmentEndDate|date }}</h5>
+                      </ng-container>
+                      <ng-container *ngIf="desc.isChild == 0;">
+                        {{ desc.taskAssignmentEndDate|date }}
+                      </ng-container>
+                     
+                    </td>
+                    
+                      <td>
+                        <ng-container *ngIf="desc.displayOrder != 1;else phaseone">
+                        <mat-form-field class="example-full-width" *ngIf="desc.isChild == 0;" appearance="outline">
+                            <mat-label>PGM/User</mat-label>
+                            <mat-select ngDefaultControl [(ngModel)]="desc.assignTo"> 
+                              <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </ng-container>
+
+                        <ng-template #phaseone>
+                             --
+                        </ng-template>
+                    </td>
+
+                      </tr>
+                 </ng-container>
+                    <ng-container *ngFor="let sub of ProjectPlanTaskList | filterBy: 'taskParentId': desc.taskId let j = index">
+                        <ng-container *ngIf="sub.level==1">
+                        <ng-container >
+                          <tr>
+                            <th scope="row">{{i+1}}.{{ j + 1 }}</th>
+                            <td class="sub">
+                              <ng-container *ngIf="sub.isChild == 1; else noChildsub">
+                                <h5 style="font-size: 1.15rem!important">{{sub.title}}</h5>
+                              </ng-container>
+                              <ng-template #noChildsub>
+                                {{ sub.title }}
+                              </ng-template>
+                            </td>
+                            <td>
+                                <div *ngIf="sub.isChild == 0;">{{ sub.durationWithunit }}</div>
+                            </td>
+                            <td style="white-space:nowrap">
+                              <ng-container *ngIf="sub.isChild == 1;">
+                                <h6> {{ sub.taskAssignmentStartDate|date }}</h6>
+                              </ng-container>
+                              <ng-container *ngIf="sub.isChild == 0;">
+                                {{ sub.taskAssignmentStartDate|date }}
+                              </ng-container>
+                             
+
+                          </td>
+                          <td style="white-space:nowrap">
+                            <ng-container *ngIf="sub.isChild == 1;">
+                              <h6>   {{ sub.taskAssignmentEndDate|date }}</h6>
+                            </ng-container>
+                            <ng-container *ngIf="sub.isChild == 0;">
+                              {{ sub.taskAssignmentEndDate|date }}
+                            </ng-container>
+                          </td>
+                            <td>
+                                <mat-form-field class="example-full-width" *ngIf="sub.isChild == 0;" appearance="outline">
+                                    <mat-label>PGM/User</mat-label>
+                                    <mat-select ngDefaultControl [(ngModel)]="sub.assignTo"> 
+                                      <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                            </td>
+                          </tr>
+                        </ng-container>
+                       </ng-container>
+                          <ng-container *ngFor="let sub2 of ProjectPlanTaskList | filterBy: 'taskParentId': sub.taskId  let p = index">
+                            <tr *ngIf="sub2.level == 2">
+                                <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}</th>
+                                <td class="sub2">
+                                  <ng-container *ngIf="sub2.isChild == 1; else noChildsub2">
+                                    <h6>{{ sub2.title }}</h6>
+                                  </ng-container>
+                                  <ng-template #noChildsub2>
+                                    {{ sub2.title }}
+                                  </ng-template>
+                                </td>
+                                <td><h6 *ngIf="sub2.isChild != 1;">{{ sub2.durationWithunit }}</h6></td>
+                                <td>
+                                  <ng-container *ngIf="sub2.isChild == 1;">
+                                    <h6>{{ sub2.taskAssignmentStartDate|date }}</h6>  
+                                  </ng-container >
+                                  <ng-container *ngIf="sub2.isChild == 0;">
+                                    {{ sub2.taskAssignmentStartDate|date }}
+                                  </ng-container >
+                               
+                              </td>
+                              <td>
+                                <ng-container *ngIf="sub2.isChild == 1;">
+                                  <h6>{{ sub2.taskAssignmentEndDate|date }}</h6>  
+                                  
+                                </ng-container >
+                                <ng-container *ngIf="sub2.isChild == 0;">
+                                  {{ sub2.taskAssignmentEndDate|date }}
+                                  
+                                </ng-container >
+                               
+                              </td>
+                                <td>
+                                    <mat-form-field class="example-full-width" *ngIf="sub2.isChild == 0;" appearance="outline">
+                                        <mat-label>PGM/User</mat-label>
+                                        <mat-select ngDefaultControl [(ngModel)]="sub2.assignTo"> 
+                                          <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
+                                </td>
+                              </tr>
+
+
+                              <ng-container *ngFor="let sub3 of ProjectPlanTaskList | filterBy: 'taskParentId': sub2.taskId  let p3 = index">
+                                <tr *ngIf="sub3.level == 3">
+                                    <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}</th>
+                                    <td class="sub3">{{ sub3.title }}</td>
+                                    <td >
+                                        <ng-container *ngIf="sub3.isChild == 0;">{{ sub3.durationWithunit }} </ng-container>   
+                                       
+                                    </td>
+                                
+                                    <td>
+
+                                      <ng-container>
+                                        {{ sub3.taskAssignmentStartDate|date }}
+                                      </ng-container >
+                                      
+                                  </td>
+                                  <td>
+                                    <ng-container >
+                                      {{ sub3.taskAssignmentEndDate|date }}
+                                    </ng-container >
+                                     
+                                  </td>
+                                    <td>
+                                        <mat-form-field class="example-full-width" *ngIf="sub3.isChild == 0;"  appearance="outline">
+                                            <mat-label>PGM/User</mat-label>
+                                            <mat-select ngDefaultControl [(ngModel)]="sub3.assignTo"> 
+                                              <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                                            </mat-select>
+                                          </mat-form-field>
+                                    
+                                    </td>                         
+                                  </tr>
+                                  <ng-container *ngFor="let sub4 of ProjectPlanTaskList | filterBy: 'taskParentId': sub3.taskId  let p4 = index">
+                                    <tr *ngIf="sub4.level == 4" >
+                                        <th scope="row lasttext">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}.{{ p4 + 1 }}</th>
+                                        <td class="sub4 lasttext">{{ sub4.title }}</td>
+                                        <!-- <td class="lasttext"> {{sub.weightage}} %</td> -->
+                                        <td class="lasttext">{{ sub4.durationWithunit }}</td>
+                                        <td>
+                                          <ng-container *ngIf="sub4.isChild == 0;">
+                                            {{ sub4.taskAssignmentEndDate|date }}
+                                          </ng-container >
+                                          
+                                      </td>
+                                      <td>
+                                        <ng-container *ngIf="sub4.isChild == 0;">
+                                          {{ sub4.taskAssignmentEndDate|date }}
+                                        </ng-container >
+                                       
+                                      </td>
+                                        <td>
+                                            <mat-form-field class="example-full-width " *ngIf="sub4.isChild == 0;" appearance="outline">
+                                                <mat-label>PG</mat-label>
+                                                <mat-select ngDefaultControl [(ngModel)]="sub4.assignTo"> 
+                                                  <mat-option *ngFor="let s of users" [value]="s.userId">{{s.name}}</mat-option>
+                                                </mat-select>
+                                              </mat-form-field>
+                                        </td>
+                                      </tr>
+                                  </ng-container>
+                              </ng-container>
+                          </ng-container> 
+                      </ng-container>
+                  </ng-container>
+            </tbody>
+              </table>
+            </div>
+         </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+</div>
+  </section>

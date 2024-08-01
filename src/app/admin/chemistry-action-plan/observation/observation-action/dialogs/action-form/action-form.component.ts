@@ -48,6 +48,7 @@ export class ActionFormComponent extends UnsubscribeOnDestroyAdapter {
       this.actionData = this.data.actionData;
       this.dialogTitle = this.actionData.referenceNumber;
     }
+   
     this.depts = this.data.depts;
     this.prioritys = this.data.prioritys;
     this.statuss = this.data.statuss;

@@ -116,9 +116,6 @@ export class EquipmentsComponent extends UnsubscribeOnDestroyAdapter implements 
   }
 
 
-
-
-
   getSiteEquipment() {
     this.isTableLoading = true;
     this.subs.sink = this.dataService.getSiteEquipment(this.user.id, this.filterObj).subscribe({

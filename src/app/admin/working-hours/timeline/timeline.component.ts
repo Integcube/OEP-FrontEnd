@@ -205,6 +205,7 @@ export class TimelineComponent extends UnsubscribeOnDestroyAdapter implements On
   getData() {
     this.subs.sink = this.dataService.getTimeLine(this.filterObj.regionId, this.filterObj.clusterId, this.filterObj.siteId, this.filterObj.equipmentId).subscribe({
       next: data => {
+        
         this.timeline = [...data.timeline];
         this.outages = [...data.outages];
         const uniqueEquipments = [...new Set(this.timeline.map(item => item.equipmentId))]
@@ -229,32 +230,39 @@ export class TimelineComponent extends UnsubscribeOnDestroyAdapter implements On
             let yearToAdd: number = (new Date(eqDetail.startDate)).getFullYear() + za + 1;
             this.yearList.push(yearToAdd);
           }
+
           for (let bb = 0; bb < this.yearList.length; bb++) {
             this.innerLevel2.yearId = this.yearList[bb];
             this.innerLevel.yearId = this.yearList[bb];
-            for (let zz = 0; zz < equipmentTimelineList.length; zz++) {
-              if (equipmentTimelineList[zz].equipmentId == uniqueEquipments[a] && equipmentTimelineList[zz].yearId == this.yearList[bb]) {
-                hoursCounter += equipmentTimelineList[zz].runningHour
-                outageCounter += equipmentTimelineList[zz].runningHour
-                wceOutageCounter += equipmentTimelineList[zz].wceRunningHour
-                wceHoursCounter += equipmentTimelineList[zz].wceRunningHour
+
+            let yearlyTotalList = equipmentTimelineList.filter(aa => aa.yearId === this.yearList[bb] && aa.equipmentId === uniqueEquipments[a]).sort((a, b) => a.monthId - b.monthId);
+            let maxMonthId = yearlyTotalList.some(a => a.fromCoe === 1) ? Math.max(...yearlyTotalList.filter(a => a.fromCoe === 1).map(a => a.monthId)): 1;
+
+         yearlyTotalList = yearlyTotalList.filter(a => a.monthId >= maxMonthId);
+
+            for (let zz = 0; zz < yearlyTotalList.length; zz++) {
+              if (yearlyTotalList[zz].equipmentId == uniqueEquipments[a] && yearlyTotalList[zz].yearId == this.yearList[bb]) {
+                hoursCounter += yearlyTotalList[zz].runningHour
+                outageCounter += yearlyTotalList[zz].runningHour
+                wceOutageCounter += yearlyTotalList[zz].wceRunningHour
+                wceHoursCounter += yearlyTotalList[zz].wceRunningHour
                 for (let x = 0; x < equipmentOutages.length; x++) {
                   if (equipmentOutages[x].counter == -1) {
                     equipmentOutages[x].counter += outageCounter
                   }
                   else {
-                    equipmentOutages[x].counter += equipmentTimelineList[zz].runningHour
+                    equipmentOutages[x].counter += yearlyTotalList[zz].runningHour
                   }
                   if (equipmentOutages[x].counterWce == -1) {
                     equipmentOutages[x].counterWce += wceOutageCounter
                   }
                   else {
-                    equipmentOutages[x].counterWce += equipmentTimelineList[zz].wceRunningHour
+                    equipmentOutages[x].counterWce += yearlyTotalList[zz].wceRunningHour
                   }
                   let dateIdD = new Date(equipmentOutages[x].nextOutageDate)
                   let dateId = dateIdD.getFullYear();
                   console.log(dateId);
-                  if ((equipmentOutages[x].runningHours != null && equipmentOutages[x].runningHours <= equipmentOutages[x].counter && equipmentTimelineList[zz].monthId == 12)|| (this.topLevel.eqType=="GT" && equipmentOutages[x].wceHours != null && equipmentOutages[x].wceHours <= equipmentOutages[x].counterWce && equipmentTimelineList[zz].monthId == 12) || (dateId == this.yearList[bb] && equipmentOutages[x].validate != "NoValidate" && equipmentTimelineList[zz].monthId == 12)) {
+                  if ((equipmentOutages[x].runningHours != null && equipmentOutages[x].runningHours <= equipmentOutages[x].counter && yearlyTotalList[zz].monthId == 12)|| (this.topLevel.eqType=="GT" && equipmentOutages[x].wceHours != null && equipmentOutages[x].wceHours <= equipmentOutages[x].counterWce && yearlyTotalList[zz].monthId == 12) || (dateId == this.yearList[bb] && equipmentOutages[x].validate != "NoValidate" && yearlyTotalList[zz].monthId == 12)) {
                     let varz: WH_timelapseOutage = {
                       outageTitle: equipmentOutages[x].outageTitle,
                       outageCode: equipmentOutages[x].colorCode,

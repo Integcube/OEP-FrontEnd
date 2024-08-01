@@ -27,7 +27,6 @@ export class ObervationService {
 
   getObservations(userId: number, regionList:string, siteList:string): Observable<CAPObsAPI> {
     let data = { "userId": userId , "regionList":regionList, "siteList":siteList}
-    debugger;
     return this.http.post<CAPObsAPI>(this.getObservableURL, data).pipe(
       tap(data => console.log(JSON.stringify(data))),
     )

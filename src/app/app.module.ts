@@ -33,6 +33,8 @@ import {
 
 import { LoadingBarRouterModule } from "@ngx-loading-bar/router";
 import { OMExcludePipePipe } from './_pipes/omexclude-pipe.pipe';
+import { ProjectPlanModule } from './admin/project-paln/project-plan.module';
+import { ProjectPlanRoutingModule } from './admin/project-paln/project-plan-routing.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -71,6 +73,7 @@ export function createTranslateLoader(http: HttpClient): any {
         // core & shared
         CoreModule,
         SharedModule,
+        ProjectPlanRoutingModule,
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
