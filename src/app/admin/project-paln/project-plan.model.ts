@@ -103,6 +103,7 @@ export class ProjectPlanMainTask{
     durationUnit:number;
     lagUnit:number;
     displayOrder:number;
+    taskdisplayOrder:number;
     constructor(reg:any){
         this.taskId=reg.taskId?reg.taskId:-1;
         this.planId=reg.planId?reg.planId:-1;
@@ -114,11 +115,11 @@ export class ProjectPlanMainTask{
         this.lagDays=reg.lagDays?reg.lagDays:0;
         this.idealScore=reg.idealScore?reg.idealScore:"";
         this.code=reg.code?reg.code:"";
-        this.predecessorType=reg.predecessorType?reg.predecessorType:1;
+        this.predecessorType=reg.predecessorType?reg.predecessorType:0;
         this.durationUnit=reg.durationUnit?reg.durationUnit:1;
         this.lagUnit=reg.lagUnit?reg.lagUnit:1;
         this.displayOrder=reg.displayOrder?reg.displayOrder:1;
-        
+        this.taskdisplayOrder=reg.taskdisplayOrder?reg.taskdisplayOrder:0;
     } 
 }
 export class ProjectPlanSubTask{
@@ -137,6 +138,7 @@ export class ProjectPlanSubTask{
     predecessorType:number;
     durationUnit:number;
     lagUnit:number;
+    taskdisplayOrder:number
     constructor(reg:any){
         this.taskId=reg.taskId?reg.taskId:-1;
         this.planId=reg.planId?reg.planId:-1;
@@ -150,9 +152,10 @@ export class ProjectPlanSubTask{
         this.lagDays=reg.lagDays?reg.lagDays:0;
         this.idealScore=reg.idealScore?reg.idealScore:"";
         this.code=reg.code?reg.code:"";
-        this.predecessorType=reg.predecessorType?reg.predecessorType:1;
+        this.predecessorType=reg.predecessorType?reg.predecessorType:0;
         this.durationUnit=reg.durationUnit?reg.durationUnit:1;
         this.lagUnit=reg.lagUnit?reg.lagUnit:1;
+        this.taskdisplayOrder=reg.taskdisplayOrder?reg.taskdisplayOrder:0;
     } 
 }
 

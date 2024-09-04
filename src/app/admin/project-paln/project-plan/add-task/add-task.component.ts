@@ -209,8 +209,8 @@ Edittask(data:any){
     lagDays:data.lagDays,
     predecessorType:data.predecessorType,
     durationUnit:data.durationUnit,
-    lagUnit:data.lagUnit
-
+    lagUnit:data.lagUnit,
+    taskdisplayOrder:data.taskdisplayOrder,
   });
   this.add(newTask);
 }
@@ -242,6 +242,8 @@ EditSubTask(data:any){
      predecessorType:data.predecessorType,
      durationUnit:data.durationUnit,
      lagUnit:data.lagUnit,
+     taskdisplayOrder:data.taskdisplayOrder,
+     
     });
 
   this.addsubtask(newTask);
@@ -376,6 +378,7 @@ adjustSuccessorTasks(changedTaskId: number|0, newStartDate: Date| null, newEndDa
   });
 
   const updateTaskDates = (taskId: number, newStartDate: Date, newEndDate: Date) => {
+    debugger
     let task = taskMap.get(taskId);
     if (!task) return;
     let durationInDays = this.convertToDays(task.duration, task.durationUnit);
@@ -425,14 +428,6 @@ adjustSuccessorTasks(changedTaskId: number|0, newStartDate: Date| null, newEndDa
         console.error(`Unrecognized predecessor type ${task.predecessorType} for task ID ${task.taskId}`);
     }
 
-    // Highlight the changed task
-    const taskElement = document.querySelector(`#task-${task.taskId}`);
-    if (taskElement) {
-      taskElement.classList.add('changed-task');
-      setTimeout(() => {
-        taskElement.classList.remove('changed-task');
-      }, 2000); // Remove highlight after 2 seconds
-    }
 
     // Propagate changes to successor tasks
     this.ProjectPlanTaskList.forEach(t => {
@@ -455,7 +450,11 @@ adjustSuccessorTasks(changedTaskId: number|0, newStartDate: Date| null, newEndDa
   } else {
     updateTaskDates(changedTaskId, newStartDate, newEndDate);
   }
-  
+
+
+
+
+  debugger
 // Function to recursively update all child tasks first
 const updateChildTasks = (taskId: number) => {
   let task = taskMap.get(taskId);
@@ -521,18 +520,18 @@ const updateParentTasks = (taskId: number) => {
 };
 
 // First pass: update all tasks from bottom to top
-this.ProjectPlanTaskList.forEach(task => {
-  if (task.taskId) {
-    updateChildTasks(task.taskId);
-  }
-});
+// this.ProjectPlanTaskList.forEach(task => {
+//   if (task.taskId) {
+//     updateChildTasks(task.taskId);
+//   }
+// });
 
 // Second pass: update parent tasks based on their updated child tasks
-this.ProjectPlanTaskList.forEach(task => {
-  if (task.taskParentId) {
-    updateParentTasks(task.taskParentId);
-  }
-});
+// this.ProjectPlanTaskList.forEach(task => {
+//   if (task.taskParentId) {
+//     updateParentTasks(task.taskParentId);
+//   }
+// });
 
   const phases = new Map();
 

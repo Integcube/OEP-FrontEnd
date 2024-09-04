@@ -225,8 +225,7 @@
                      
                     </td>
                     <td style="padding: none;">
-          
-                       <select class="no-border form-select" style="width: 100px!important;" [(ngModel)]="pos.positionType" (ngModelChange)="pos.positionType = +$event">
+                       <select class="no-border form-select" style="width: 100px!important;" [(ngModel)]="pos.positionType"    (ngModelChange)="pos.positionType = +$event; onPositionChange(pos.positionId, pos.positionType)" >
                       <option [value]="1">Local</option>
                       <option [value]="2">Expat</option>
                       <option [value]="3">Remote</option>

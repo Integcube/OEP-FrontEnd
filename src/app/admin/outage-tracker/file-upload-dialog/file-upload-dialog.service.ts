@@ -28,7 +28,8 @@ export class FileUploadDialogService {
     formData.append('phaseReadId', action.phaseReadId.toString());
     formData.append('outageDate', action.nextOutageDate.toString());
     formData.append('userId', userId.toString());
-
+    formData.append('potId', action.potId.toString());
+    
 
     return this.http.post<ReturnedDocumnet>(this.saveFile, formData)
   }

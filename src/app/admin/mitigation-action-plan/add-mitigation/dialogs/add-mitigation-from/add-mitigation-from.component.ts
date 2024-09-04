@@ -64,6 +64,7 @@ export class AddMitigationFromComponent{
 
 
     }
+    debugger
     this.programs=[...this.data.programs];
     this.statuss=[...this.data.statuss]; 
     this.prioritys=[...this.data.prioritys];

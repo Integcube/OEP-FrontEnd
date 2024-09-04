@@ -122,7 +122,9 @@ export class TrackOutagesComponent extends UnsubscribeOnDestroyAdapter implement
   //   })
   // }
   updateAction(action: OT_outageTracker) {
+    debugger
     this.subs.sink = this.dataService.getOTData(this.user.id, action).subscribe({
+      
       next: dataOT => {
         const dialogRef = this.dialog.open(TrackOutagesForm2Component, {
           width: '750px',
