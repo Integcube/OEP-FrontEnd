@@ -54,6 +54,14 @@ const routes: Routes =
     loadChildren:()=>
     import('./model-equipment/model-equipment.module').then((m)=>m.ModelEquipmentModule)
   },
+  {
+    path:'pre-Insurence',
+    loadChildren:()=>
+    import('./pre-insurence/pre-insurence.module').then((m)=>m.PreInsurenceModule)
+  }
+
+  
+
 
   ]
 
