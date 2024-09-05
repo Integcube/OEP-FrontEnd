@@ -93,7 +93,6 @@ export class ProjectPlanService {
 
   savemanintask(userId,data): Observable<ProjectPlanMainTask> {
     data.createdBy=userId;
-    // data.weightage=parseFloat(data.weightage);
     data.duration=parseFloat(data.duration);
     data.lagDays=parseFloat(data.lagDays);
     data.idealScore=0;
@@ -129,7 +128,6 @@ return this.http.delete<number>(`${this.deletetaskURL}?taskId=${taskId}&userId=$
       } 
 
       saveAssignTaks(obj,List,userId): Observable<any> {
-   debugger
         obj.startDate = formatDateForBackend(obj.startDate);
         const formattedTaskList = formatDatesInList(List);
         obj.createdBy=userId;

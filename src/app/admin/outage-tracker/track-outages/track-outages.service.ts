@@ -18,8 +18,6 @@ export class TrackOutagesService {
   private readonly otcDataURL = `${environment.apiUrl}/OT_OutageTracker/outageInfoC`
 
   
-
-
   constructor(private http: HttpClient) { }
   getActions(userId: number, filter: OT_OutageTrackerFilter): Observable<OT_outageTracker[]> {
     let data = { userId, filter }

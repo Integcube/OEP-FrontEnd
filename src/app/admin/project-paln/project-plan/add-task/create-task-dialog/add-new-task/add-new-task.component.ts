@@ -63,6 +63,7 @@ export class AddNewTaskComponent extends UnsubscribeOnDestroyAdapter implements 
         predecessorType: [this.model.predecessorType],
         durationUnit:[this.model.durationUnit],
         lagUnit:[this.model.lagUnit],
+        taskdisplayOrder:[this.model.taskdisplayOrder, [Validators.required]],
       })
     }
     submit() {

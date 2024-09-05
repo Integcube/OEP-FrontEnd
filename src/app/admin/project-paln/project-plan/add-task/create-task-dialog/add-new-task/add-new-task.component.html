@@ -54,7 +54,17 @@
 
             
             <div class="row">
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Display Order</mat-label>
+                        <input matInput formControlName="taskdisplayOrder" type="number" inputmode="numeric">
+                        <mat-error *ngIf="form.get('taskdisplayOrder').hasError('required')">
+                            DisplayOrder is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
                         <mat-label>Predecessor</mat-label>
                         <mat-select #phase  formControlName="predecessorId">

@@ -112,7 +112,8 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
       approvedManpower: null,
       numberOfPosition: null, 
       numberOfPositionActual: null, 
-      siteId: this.ManPowerList.length > 0 ? this.ManPowerList[0].siteId : 1
+      siteId: this.ManPowerList.length > 0 ? this.ManPowerList[0].siteId : 1,
+      ishow:1
     };
 
     newDates.forEach((date, index) => {
@@ -140,6 +141,16 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
       }
     });
   }
+
+  onPositionChange(positionId: number, positionType: Number): void {
+    debugger
+    this.ManPowerList.forEach(item => {
+      if (item.positionId === positionId) {
+        item.positionType = positionType;
+      }
+    });
+  }
+
 
   SaveManPowerPlan() {
     this.isTableLoading=true;

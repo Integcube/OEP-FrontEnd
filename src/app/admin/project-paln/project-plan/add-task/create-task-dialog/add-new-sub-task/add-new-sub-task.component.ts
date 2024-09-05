@@ -63,7 +63,7 @@ export class AddNewSubTaskComponent extends UnsubscribeOnDestroyAdapter implemen
         predecessorType: [this.model.predecessorType,[Validators.required]],
         durationUnit:[this.model.durationUnit],
         lagUnit:[this.model.lagUnit],
-        
+        taskdisplayOrder:[this.model.taskdisplayOrder, [Validators.required]],
       })
     }
     submit() {

@@ -38,15 +38,15 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
   ) {
     super()
     this.action = { ...this.data?.outageAction }
-    this.monthList = [...this.data.dataOt.monthList];
-    this.userData = [...this.data.dataOt.userData];
+    this.monthList = [...(this.data.dataOt?.monthList ?? [])];
+    this.userData = [...(this.data.dataOt?.userData ?? [])];
     if (this.data.dataOt.outageData == null) {
       this.otData = new OTData({})
-      this.conc = this.monthList[0].monthId;
+      // this.conc = this.monthList[0].monthId;
     }
     else {
       this.otData = { ...this.data.dataOt.outageData }
-      this.conc = this.otData.monthId+"-"+this.otData.yearId;
+      // this.conc = this.otData.monthId+"-"+this.otData.yearId;
     }
 
     this.dialogTitle = this.action.siteTitle + "-" + this.action.unit + " " + this.action.outageTitle + " " + this.action.phaseTitle
@@ -71,7 +71,8 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
       potId: [this.action.potId, [Validators.required]],
       progressId: [this.otData.progressId, [Validators.required]],
       remarks: [this.otData.remarks, [Validators.required]],
-      date: [this.conc, [Validators.required]],
+      // date: [this.conc, ],[Validators.required]
+      date: [this.conc ],
       progress: [this.otData.progress, [Validators.required,
       Validators.pattern(/^(?:100(?:\.0{1,2})?|\d{1,2}(?:\.\d{1,2})?)$/),
       Validators.min(0),
@@ -123,9 +124,12 @@ export class TrackOutagesForm2Component extends UnsubscribeOnDestroyAdapter {
       this.otData.progress = +this.actionForm.value.progress;
       this.otData.progressId = +this.actionForm.value.progressId;
       this.otData.remarks = this.actionForm.value.remarks;
-      let conctVal = this.actionForm.value.date.split('-');
-      this.otData.monthId = parseInt(conctVal[0], 10);
-      this.otData.yearId = parseInt(conctVal[1], 10);
+      // let conctVal = this.actionForm.value.date.split('-');
+      // this.otData.monthId = parseInt(conctVal[0], 10);
+      // this.otData.yearId = parseInt(conctVal[1], 10);
+       
+       this.otData.monthId = -1;
+       this.otData.yearId = -1;
       this.Apidata.monthlyData = { ...this.otData }
       this.dialogRef.close(this.Apidata);
     }
