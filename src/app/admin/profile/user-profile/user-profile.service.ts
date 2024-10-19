@@ -16,6 +16,8 @@ export class UserProfileService {
   private imageSubject = new BehaviorSubject<string>('');
   imageSubject$ = this.imageSubject.asObservable();
   constructor(private http:HttpClient) { }
+
+
   getData(id:number): Observable<userInfo> {
     let userID ={userId:id}
     return this.http.post<userInfo>(this.getUrl,userID)

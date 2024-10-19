@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs/internal/Observable';
 import { environment } from 'src/environments/environment';
 import { KeyIssueFilters } from '../project-plan.model';
-
+import { Injectable } from '@angular/core';
+import * as XLSX from 'xlsx';
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +35,7 @@ export class MainPowerPlanService {
       }
       return this.http.post<any>(this.saveManpowerPlanURL, data);
    }
-
+ 
 
 }
 

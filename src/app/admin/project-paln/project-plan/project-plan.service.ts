@@ -48,7 +48,10 @@ export class ProjectPlanService {
   constructor(private http: HttpClient) { }
   //Get data from browsers Local Storage
   // Function to format date before sending to backend
-
+  private readonly ManualURL = `${environment.apiUrl}/Account/downloadUserManual`;
+  downloadUserManual(): Observable<Blob> {
+    return this.http.get(`${this.ManualURL}`, { responseType: 'blob' });
+  }
   getProjectPlans(userId): Observable<ProjectPlan[]> {
     return this.http.get<ProjectPlan[]>(`${this.getprojectplan}?UserId=${userId}`);
   } 

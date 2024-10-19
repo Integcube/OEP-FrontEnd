@@ -175,16 +175,32 @@ buildHierarchy(tasks: any[]): any[] {
 }
 
   generateMonthYearList(minDate: Date, maxDate: Date) {
-   let currentDate = new Date(minDate);
+   let currentDate = new Date();
+   let allMonths = [];
     while (currentDate <= maxDate) {
       let monthYearString = this.getMonthYearString(currentDate);
-      this.Yearlist.push({
+      allMonths.push({
         date: monthYearString,
         isSelected: false
       });
-
       currentDate.setMonth(currentDate.getMonth() + 1);
     }
+
+    const now = new Date();
+    const currentMonthYearString = this.getMonthYearString(now);
+  
+    // Reorder the list so that the current month-year is on top
+    this.Yearlist = allMonths.sort((a, b) => {
+      if (a.date === currentMonthYearString) return -1;
+      if (b.date === currentMonthYearString) return 1;
+      return 0;
+    });
+
+  // Mark the current month-year as selected
+  if (this.Yearlist.length > 0 && this.Yearlist[0].date === currentMonthYearString) {
+  this.yearListFn(this.Yearlist[0]);
+    this.Yearlist[0].isSelected = true;
+}
   }
   getMonthYearString(date: Date): string {
     const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -207,6 +223,7 @@ buildHierarchy(tasks: any[]): any[] {
   //Filters
   yearListFn(year:any){
   
+    this.clearFn();
     let index = this.year.indexOf(year.date);
     if (index == -1) {
       this.year.push(year.date);
@@ -376,63 +393,10 @@ this.ProjectPlanTaskList.forEach(task => {
   }
 });
 
-
-    // const updateParentTaskDates = (taskId: number) => {
-    //   let task = taskMap.get(taskId);
-    //   if (!task) return;
-  
-    //   const childTasks = this.ProjectPlanTaskList.filter(t => t.taskParentId === taskId);
-    //   if (childTasks.length === 0) return;
-  
-    //   let minStartDate: Date | null = null;
-    //   let maxEndDate: Date | null = null;
-   
-      
-
-
-    //   childTasks.forEach(child => {
-    //     if (child.taskAssignmentStartDate) {
-    //       const childStartDate = new Date(child.taskAssignmentStartDate);
-    //       if (!minStartDate || childStartDate < minStartDate) {
-    //         minStartDate = childStartDate;
-    //       }
-    //     }
-  
-    //     if (child.taskAssignmentEndDate) {
-    //       const childEndDate = new Date(child.taskAssignmentEndDate);
-    //       if (!maxEndDate || childEndDate > maxEndDate) {
-    //         maxEndDate = childEndDate;
-    //       }
-    //     }
-
-
-    //     updateParentTaskDates(child.taskId);
-    //   });
- 
-    //   if (task) {
-    //     task.taskAssignmentStartDate = minStartDate || task.taskAssignmentStartDate || null;
-    //     task.taskAssignmentEndDate = maxEndDate || task.taskAssignmentEndDate || null;
-
-    //     task.completionProgress =calculateCumulativeProgress(task.taskAssignmentStartDate,task.taskAssignmentEndDate,new Date() )
-    //   }
- 
-
-    // };
-  
-    // this.ProjectPlanTaskList.forEach(task => {
-    //   if (task.taskParentId) {
-    
-    //     updateParentTaskDates(task.taskParentId);
-    //   }
-    // });
-
     this.ProjectPlanTaskList.forEach(task => {
      task.completionProgress = calculateCumulativeProgress(task.taskAssignmentStartDate, task.taskAssignmentEndDate,new Date());
    });
     
-
-
-
   }
   
   convertToDays(duration, unit) {

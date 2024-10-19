@@ -106,12 +106,23 @@
                     </mat-chip-list>
                 </div>
             </div>
+            <div class="row">
+                <div class="font-weight-bold font-17 mt-4 mb-4">
+                    Tils Settings</div>
+                    <div  class="col-md-12 mb-4">
+                        <mat-checkbox [disabled]="mode" id="isTlsAdmin" formControlName="isTlsAdmin"  name="isTlsAdmin" class="example-margin" >
+                            Is Tils admin 
+                        </mat-checkbox>
+                    </div>
+        
+            </div>
         </form>
         <form #form="ngForm" >
+
             <div class="row">
                 <div class="font-weight-bold font-17 mt-0 mb-4">
                     Work Strem Technology Access</div>
-                    <div  class="col-md-12">
+                    <div  class="col-md-12 ">
                         <mat-checkbox [disabled]="mode" id="selectAllTech"  name="selectAllTech" class="example-margin"  [(ngModel)]="selectTech" (change)="techSelect($event, 'all')">
                            Select All
                         </mat-checkbox>

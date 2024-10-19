@@ -160,7 +160,19 @@ NewAdd(){
     })
   }
 
-
+  downloadManual() {
+    this.dataService.downloadUserManual().subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'OEP User Manual For Mobilization.pdf';
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error('Download error:', error);
+    });
+  }
   AddTask(row: any) {
     const id = row.planId; 
     this.router.navigate(['/admin/project-plan/add-task', id]);

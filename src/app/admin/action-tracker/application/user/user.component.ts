@@ -57,6 +57,7 @@ export class UserComponent extends UnsubscribeOnDestroyAdapter implements OnInit
     this.isTableLoading = true;
     this.subs.sink = this.dataService.getUser(this.user.id).subscribe({
       next: data => {
+        debugger
         this.users = [...data.users];
         this.userData = [...data.users];
         this.dataSource.data = [...this.users];

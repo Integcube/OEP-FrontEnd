@@ -7,6 +7,15 @@
   margin: 0 !important;
   padding: 0!important;
 }
+
+.IsFilterRecord{
+  background-color: #fd6c9657;
+}
+
+
+.IsCompleted {
+    background-color: #0c990854;
+}
 </style>
 <section class="content">
     <div class="content-block">
@@ -124,19 +133,7 @@
                 
           </mat-panel-title>
             <mat-panel-description>
-              <!-- <ng-container >
-                <div class="row ms-2 me-2 mt-2 mb-2">
-          <div class="col-md-12 col-12 ms-2 me-2 mt-2">
-            <ng-container >
-              <h6 *ngIf="phase.phaseId !== 1;">Start:  {{ phase.phaseStartDate|date }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date: {{ phase.phaseEndDate|date }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Phase wgts:{{ phase.phaseWeightage }} % &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actual Prog. :{{ phase.taskCompletionProgress }} %</h6> 
-            </ng-container >
      
-          
-        </div>
-      
-          
-        </div>
-      </ng-container> -->
       <div class="col-md-4 col-4 ms-2 me-2 mt-2">
         <ng-container *ngIf="phase.displayOrder != 1;">
           <h6>{{ phase.phaseStartDate|date }}&nbsp;&nbsp;-&nbsp;&nbsp;{{ phase.phaseEndDate|date }}</h6> 
@@ -182,7 +179,7 @@
                 <tbody>
                   <ng-container *ngFor="let desc of ProjectPlanTaskList| filterBy: 'phaseId': phase.phaseId let i = index">
                     <ng-container *ngIf="desc.level == 0 && desc.taskId!=-1">
-                      <tr>
+                      <tr  [ngClass]="{'IsFilterRecord': desc.isFilter == 1,'IsCompleted': desc.isFilter === 2}">
                       <td >
                         <ng-container *ngIf="desc.isChild == 1; else noChildno">
                             <h5 style="font-size: 1.3rem!important">{{i+1}}</h5>  
@@ -191,12 +188,12 @@
                             {{i+1}}
                           </ng-template>
                     </td>
-                      <td style=" padding-left: 0px !important">
+                      <td style="padding-left: 0px !important">
                         <ng-container *ngIf="desc.isChild == 1; else noChild">
                             <h5 style="font-size: 1.3rem!important">{{desc.title}}</h5>
                           </ng-container>
                           <ng-template #noChild>
-                            {{ desc.title }}
+                            {{ desc.title }} 
                           </ng-template>
                     </td>
                       <td>
@@ -265,7 +262,7 @@
                     <ng-container *ngFor="let sub of ProjectPlanTaskList | filterBy: 'taskParentId': desc.taskId let j = index">
                         <ng-container *ngIf="sub.level==1">
                         <ng-container >
-                          <tr>
+                          <tr [ngClass]="{'IsFilterRecord': sub.isFilter == 1,'IsCompleted': sub.isFilter === 2}">
                             <th scope="row">{{i+1}}.{{ j + 1 }}</th>
                             <td class="sub">
                               <ng-container *ngIf="sub.isChild == 1; else noChildsub">
@@ -335,7 +332,7 @@
                        </ng-container>
                     
                           <ng-container *ngFor="let sub2 of ProjectPlanTaskList | filterBy: 'taskParentId': sub.taskId  let p = index">
-                            <tr *ngIf="sub2.level == 2">
+                            <tr *ngIf="sub2.level == 2" [ngClass]="{'IsFilterRecord': sub2.isFilter == 1 ,'IsCompleted': sub2.isFilter === 2}">
                                 <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}</th>
                                 <td class="sub2">
                                   <ng-container *ngIf="sub2.isChild == 1; else noChildsub2">
@@ -398,7 +395,7 @@
 
 
                               <ng-container *ngFor="let sub3 of ProjectPlanTaskList | filterBy: 'taskParentId': sub2.taskId  let p3 = index">
-                                <tr *ngIf="sub3.level == 3">
+                                <tr *ngIf="sub3.level == 3" [ngClass]="{'IsFilterRecord': sub3.isFilter == 1,'IsCompleted': sub3.isFilter === 2}">
                                     <th scope="row">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}</th>
                                     <td class="sub3">{{ sub3.title }}</td>
                                     <td >
@@ -450,7 +447,7 @@
                                     </td>                         
                                   </tr>
                                   <ng-container *ngFor="let sub4 of ProjectPlanTaskList | filterBy: 'taskParentId': sub3.taskId  let p4 = index">
-                                    <tr *ngIf="sub4.level == 4" >
+                                    <tr *ngIf="sub4.level == 4" [ngClass]="{'IsFilterRecord': sub4.isFilter == 1,'IsCompleted': sub4.isFilter === 2}">
                                         <th scope="row lasttext">{{i+1}}.{{ j + 1 }}.{{ p + 1 }}.{{ p3 + 1 }}.{{ p4 + 1 }}</th>
                                         <td class="sub4 lasttext">{{ sub4.title }}</td>
                                         <!-- <td class="lasttext"> {{sub.weightage}} %</td> -->

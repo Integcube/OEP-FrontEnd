@@ -107,6 +107,7 @@
                      
                     </div>
                   </div>
+                
                 </div>
                 
               </div>
@@ -183,7 +184,7 @@
               </mat-progress-spinner>
             </div>
             <ng-container *ngIf="!isTableLoading">
-            <table class="table  table-bordered" >
+            <table class="table  table-bordered" id="datatable">
                 <thead class="sticky-header">
                   <tr>
                     <th scope="col" class="sticky-column">#</th>
@@ -200,7 +201,7 @@
                  
                     <th scope="col" class="date-column text-center" style="white-space: nowrap;" >
                      {{ dateItem.date| date: 'MMM-yyyy' }}<br>
-                      <span style="font-size: x-small;">Planed/Actual</span>
+                      <span style="font-size: x-small;">Contractual&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;   Planned (Early Mob.)&nbsp; &nbsp; &nbsp; &nbsp; Actual</span>
                     </th>
                   </ng-container>
                   </tr>
@@ -240,8 +241,9 @@
                  </td>
                       <td class="text-center" *ngFor="let data of filteredManPowerList | filterOnObjBase: { positionId: pos.positionId,ishow: 1 }|orderBy: 'date': 'asc'">
                         <div class="d-flex justify-content-between" style="gap: 5px;">
-                          <input class="change-color-on-focus form-control"  type="number" [(ngModel)]="data.numberOfPosition" placeholder="Planed" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')" style="width: 70px!important;background-color: #eee">
-                          <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPositionActual" placeholder="Actual" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPositionActual')" style="width: 70px!important;    background-color: #beffe1;">
+                          <input class="change-color-on-focus form-control"  type="number" [(ngModel)]="data.contractual" placeholder="Contractual" (ngModelChange)="onManpowerChange(data, $event, 'contractual')" style="width: 90px!important;background-color: #eee"> 
+                          <input class="change-color-on-focus form-control"  type="number" [(ngModel)]="data.numberOfPosition" placeholder="Planned(Early Mob.)" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')" style="width: 130px!important;background-color: #eee">
+                          <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPositionActual" placeholder="Actual" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPositionActual')" style="width: 80px!important;    background-color: #beffe1;">
                         </div>
                         <!-- <input class="change-color-on-focus form-control" style="width: 5px;" type="number" [(ngModel)]="data.numberOfPosition" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')"> <input class=" change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPosition" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')"> -->
                       </td>
@@ -270,6 +272,7 @@
     </td>
     <td class="text-center" *ngFor="let data of specialManPowerList| filterOnObjBase: { positionId: pos.positionId,ishow: 1} | orderBy: 'date': 'asc'">
       <div class="d-flex justify-content-between" style="gap: 5px;">
+        <input class="change-color-on-focus form-control"  type="number" [(ngModel)]="data.contractual" placeholder="Contractual" (ngModelChange)="onManpowerChange(data, $event, 'contractual')" style="width: 90px!important;background-color: #eee"> 
         <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPosition" placeholder="Planned" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPosition')" style="width: 70px!important;" disabled>
         <input class="change-color-on-focus form-control" type="number" [(ngModel)]="data.numberOfPositionActual" placeholder="Actual" (ngModelChange)="onManpowerChange(data, $event, 'numberOfPositionActual')" style="width: 70px!important;" disabled>
       </div>

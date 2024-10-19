@@ -50,7 +50,7 @@ export class FileUploadDialogService {
     return this.http.post(`${this.downloadFileUrl}/${DocId}`, null, {
       responseType: 'blob',
       observe: 'response'
-    });
+    }); 
   }
 
 

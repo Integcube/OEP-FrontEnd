@@ -27,7 +27,7 @@ export class ProjectKeyIssuesService {
 
 
       saveKeyIssues(data: KeyIssueFilters, userId: number): Observable<KeyIssueFilters> {
-        debugger
+
         data.userId = userId;
 
     

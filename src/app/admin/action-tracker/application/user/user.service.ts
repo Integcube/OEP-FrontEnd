@@ -40,21 +40,21 @@ export class UserService {
   getTrash(userId:number):Observable<UUser[]>{
     let userID = {"userId":userId};
     return this.http.post<UUser[]>(this.trashURL,userID).pipe(
-      tap(data => console.log(JSON.stringify(data))),
+      tap(),
       catchError(err => this.handleError(err))
     )
   }
   getInfo(userId:number, info:UUser):Observable<UUserInfo>{
     let userData = {"info":info, "userId":userId};
     return this.http.post<UUserInfo>(this.getInfoURL,userData).pipe(
-      tap(data => console.log(JSON.stringify(data))),
+      tap(),
       catchError(err => this.handleError(err))
     )
   }
   saveUser(userId:number, data:UFormSubmit):Observable<UUser>{
     let userData = {"data":data, "userId":userId}
     return this.http.post<UUser>(this.saveURL, userData).pipe(
-      tap(data => console.log(JSON.stringify(data))),
+      tap( ),
       catchError(err => this.handleError(err))
     )
   }

@@ -1,1 +1,180 @@
-<p>insurence-actions works!</p>
+<style>
+    .table tbody tr td, .table tbody tr th {
+    padding: 7px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mat-table td, .mat-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.mat-table th {
+  text-align: left;
+  background-color: #f2f2f2;
+}
+
+.sub1{
+  padding-left: 10px !important;
+}
+.sub2{
+  padding-left: 15px !important;
+}
+.sub3{
+  padding-left: 30px !important;
+}
+
+.sub4{
+  padding-left: 40px !important;
+}
+
+h4, .h4 {
+        font-size: 1.3rem!important
+    }
+
+    h5, .h5 {
+    font-size: 1.15rem!important;
+}
+.lasttext {
+    font-size: 0.8rem!important;
+}
+
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+     margin: 0px!important;
+}
+
+.mat-form-field-wrapper {
+    padding-bottom: 0px!important;
+}
+
+:host ::ng-deep .mat-form-field-wrapper{
+    margin: 0 !important;
+    padding: 0!important;
+  }
+  .table tbody tr td, .table tbody tr th {
+      padding: 5px!important;
+  }
+</style>
+
+<section class="content mb-4">
+    <div class="content-block mb-4">
+      <div class="block-header">
+        <app-breadcrumb [title]="'Proactive Insurence Recommendation'" [items]="[]" [active_item]="'Actions'"></app-breadcrumb>
+      </div>
+      <div class="row clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="card" style="margin-bottom: 8px!important">
+            <div class="body">
+              <div class="row">
+                <div class="col-md-12" style="margin-bottom: 0!important;">
+                  <div class="row">
+                    <div class="col-md-6">
+                     <h5>{{startInfo}}</h5> 
+                    </div>
+                  <div class="col-md-6">
+                    <div class="example-button-row float-end">
+                      <button mat-raised-button  color="danger" (click)="GoBackToList()">
+                        <mat-icon class="col-white" class="m-r-10">arrow_back_ios</mat-icon>Back
+                      </button>
+                   
+                      <button mat-raised-button color="primary" (click)="addNew()" tabindex="-1">Add Action</button>
+                     
+                  </div>
+                   </div>
+                  </div>
+                </div>
+            </div>
+            </div>
+          </div>
+          <div *ngIf="isTableLoading" class="tbl-spinner">
+            <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
+            </mat-progress-spinner>
+          </div>
+          <mat-accordion multi class="example-headers-align ">
+            <mat-expansion-panel hideToggle  [expanded]="true" class="mb-2">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                <h6>Recommendation Action</h6>
+              </mat-panel-title>
+                <mat-panel-description>
+           
+                </mat-panel-description>  
+              </mat-expansion-panel-header>
+              <div class="row mb-4">
+                <div class="col-md-12 col-12 col-xs-12 col-sm-12 table-responsive">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr style="font-size: small !important;">
+                        <th scope="col" > #</th>
+                        <th scope="col" >Action</th>
+                        <th scope="col" >Evidence Type</th>
+                        <th scope="col">Guidelines</th>
+                        <th scope="col" >Additional Guidelines</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let desc of ProjectPlanTaskList let i = index">
+                        <ng-container >
+                          <tr style="font-size: small !important;">
+                          <td>{{i+1}}</td>
+                          <td >
+                                {{ desc.title }} 
+                         
+                        </td>
+
+                        <td >
+                          {{ desc.evidenceType }} 
+                          
+                      </td>
+                        <td >
+                          {{ desc.guidelines }} 
+                      </td>
+                
+                  <td>
+  
+                    {{desc.additionalGuidelines}}
+                  </td>
+               
+                          <td>
+                            <div class="float-end">     
+                              <button mat-button (click)="$event.stopPropagation()" color="primary" [matMenuTriggerFor]="menu" class="header-dropdown">
+                                <mat-icon>more_vert</mat-icon>
+                              </button>
+                              <mat-menu #menu="matMenu">
+                         
+                                <button mat-menu-item  (click)="EditAction(desc)">
+                                 Edit</button>
+                                
+                                <button mat-menu-item (click)="deletetask(desc)" >
+                                  Delete</button> 
+            
+                              </mat-menu>
+                            </div>
+                          </td>
+                          </tr>
+                             </ng-container>
+                      </ng-container>
+                   </tbody>
+                  </table>
+                </div>
+             </div>
+            </mat-expansion-panel>
+          </mat-accordion>    
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+  
+
+  
+  

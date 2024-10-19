@@ -102,6 +102,7 @@ export class AddUserFormComponent implements OnInit{
       phone: [this.users.phone, [Validators.required]],
       firstName:[this.users.firstName, [Validators.required]],
       lastName:[this.users.lastName, [Validators.required]],
+      isTlsAdmin:[this.users.isTlsAdmin],
       role: [""],
     })
   }
@@ -190,6 +191,8 @@ else{
     this.users.phone = this.userForm.value.phone;
     this.users.firstName = this.userForm.value.firstName;
     this.users.lastName = this.userForm.value.lastName;
+    this.users.isTlsAdmin = this.userForm.value.isTlsAdmin;
+    
     this.submitObj.users = { ...this.users }
   }
 

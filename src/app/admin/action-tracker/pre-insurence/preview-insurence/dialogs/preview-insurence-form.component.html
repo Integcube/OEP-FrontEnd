@@ -1,0 +1,99 @@
+<div class="addContainer">
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    <div class="font-weight-bold p-t-5 msl-3 font-17">
+                        {{dialogTitle}}</div>
+                </div>
+            </div>
+        </div>
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+            <div class="row ms-4 me-4">
+                <div class="col-md-12 mt-3" style="font-size: larger;">
+                    <span style="color:#4CAA49"><b>Action:</b></span><span class="ms-2 ">{{action.actionTitle}}</span>
+                </div>
+                <!-- <div class="col-md-12 mt-3" style="font-size: medium;">
+                    <span style="color:#4CAA49"><b>Evidence Type:</b></span><span class="ms-2 ">{{action.evidenceType}}</span>
+                </div> -->
+                <div class="col-md-12 mt-3" style="font-size: medium;">
+                    <span style="color:#4CAA49"><b>Guidelines:</b></span><span class="ms-2 ">{{action.guidelines}}</span>
+                </div>
+                <div class="col-md-12 mt-3" style="font-size: medium;">
+                    <span style="color:#4CAA49"><b>Additional Guidelines:</b></span><span class="ms-2 ">{{action.additionalGuidelines}}</span>
+                </div>
+                
+                <div class="col-md-12 mt-3" style="font-size: medium;">
+                    <span style="color:#4CAA49"><b>Deadline:</b></span><span class="ms-2 ">{{action.deadline | date}}</span>
+                </div>
+            </div>
+        <form class="register-form m-4" [formGroup]="actionForm">
+            <div class="row">
+                
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Select Status</mat-label>
+                        <mat-select formControlName="statusId" >
+                            <mat-option *ngFor="let m of statusList" [value]="m.statusId">{{m.title}}</mat-option>
+                          </mat-select> 
+                      
+                          <mat-error *ngIf="actionForm.get('responsible').hasError('required')">
+                            Status is Required
+                        </mat-error>                
+                    </mat-form-field>
+                </div> 
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Select Responsible</mat-label>
+                        <mat-select formControlName="responsible" >
+                            <mat-option *ngFor="let m of userData" [value]="m.userId">{{m.userName}}</mat-option>
+                          </mat-select> 
+                      
+                          <mat-error *ngIf="actionForm.get('responsible').hasError('required')">
+                            Responsible is Required
+                        </mat-error>                
+                    </mat-form-field>
+                </div> 
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Site Comments</mat-label>
+                        <textarea matInput formControlName="siteComments" ></textarea>
+                        <mat-error *ngIf="actionForm.get('siteComments').hasError('required')">
+                            Site Comments is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Admin Comments/Review</mat-label>
+                        <textarea matInput formControlName="adminComments" ></textarea>
+                        <mat-error *ngIf="actionForm.get('adminComments').hasError('required')">
+                            Admin Comments is Required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <section>
+                        Flag Yes <mat-checkbox formControlName="adminFlag" >
+                        </mat-checkbox>
+                      </section>
+                </div>
+            </div>
+                    <div class="row mt-4">      
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-6">
+                    <div class="example-button-row float-end mt-2">
+                        <button mat-raised-button color="primary" (click)="submit()" [disabled]="!actionForm.valid" *ngIf="data.action!='view'">Save</button>    
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form> 
+    </div>
+</div>

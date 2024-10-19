@@ -360,9 +360,10 @@ getusers() {
 saveAssignTasks(){
   this.subs.sink = this.dataService.saveAssignTaks(this.startInfo,this.ProjectPlanTaskList,this.user.id).subscribe({
     next: data => {
-    
+      this.getPlanTask(this.ActivePlanId);
      this.showNotification('snackbar-success','Data Saved sucessfully', 'bottom', 'center');
-
+     
+     
     },
     error: err => {
       this.errorMessage = err;
@@ -378,7 +379,6 @@ adjustSuccessorTasks(changedTaskId: number|0, newStartDate: Date| null, newEndDa
   });
 
   const updateTaskDates = (taskId: number, newStartDate: Date, newEndDate: Date) => {
-    debugger
     let task = taskMap.get(taskId);
     if (!task) return;
     let durationInDays = this.convertToDays(task.duration, task.durationUnit);

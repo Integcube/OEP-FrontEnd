@@ -8,6 +8,8 @@ export class UUser {
     phone: string;
     firstName:string;
     lastName:string;
+    isTlsAdmin:boolean;
+    
     constructor(reg) {
         this.userId = reg.userId ? reg.userId : -1;
         this.userName = reg.userName ? reg.userName : "";
@@ -16,6 +18,7 @@ export class UUser {
         this.phone = reg.phone ? reg.phone : "";
         this.firstName = reg.firstName ? reg.firstName : "";
         this.lastName = reg.lastName ? reg.lastName : "";
+        this.isTlsAdmin = reg.isTlsAdmin ? reg.isTlsAdmin : false;
 
     }
 }

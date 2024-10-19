@@ -50,9 +50,6 @@ export class AssignTaskComponent extends UnsubscribeOnDestroyAdapter implements 
       }
     
     });
-    this.getSites();
-    this.getusers();
-    this.getplans();
   }
   getSites() {
 
@@ -64,9 +61,8 @@ export class AssignTaskComponent extends UnsubscribeOnDestroyAdapter implements 
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
-  getusers() {
-
-    this.subs.sink = this.dataService2.getUsers(-1,-1,-1).subscribe({
+  getusers(siteId) {
+    this.subs.sink = this.dataService2.getUsers(-1,-1,siteId).subscribe({
       next: data => {
         const defaultUser = {
           userId: -1,
@@ -91,11 +87,7 @@ export class AssignTaskComponent extends UnsubscribeOnDestroyAdapter implements 
       error: err => { this.errorMessage = err; this.showNotification('black', err, 'bottom', 'center') },
     })
   }
-  
-  onPlanChange(selectedPlanId: any): void {
-    console.log('Selected plan ID:', selectedPlanId);
-   
-  }
+
 
 
   getPlanTask(StartPlanId) {
@@ -106,6 +98,8 @@ export class AssignTaskComponent extends UnsubscribeOnDestroyAdapter implements 
         this.ProjectPlanTaskList  = [...data.results];
         if(data.planInfo)
         {
+       
+          this.getusers(data.planInfo.siteId);
           this.startInfo= new StartPlanInfo({...data.planInfo});
        
         }

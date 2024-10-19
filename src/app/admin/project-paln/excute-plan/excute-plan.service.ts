@@ -30,6 +30,7 @@ export class ExcuteplanService {
   } 
 
   getPlanTask(UserId:number,startPlanId:number,yearList:any): Observable<any> {
+
     let data={
       UserId:UserId,
       startPlanId:startPlanId,

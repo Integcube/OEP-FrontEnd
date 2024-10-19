@@ -113,7 +113,8 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
       numberOfPosition: null, 
       numberOfPositionActual: null, 
       siteId: this.ManPowerList.length > 0 ? this.ManPowerList[0].siteId : 1,
-      ishow:1
+      ishow:1,
+      contractual: null, 
     };
 
     newDates.forEach((date, index) => {
@@ -143,7 +144,6 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
   }
 
   onPositionChange(positionId: number, positionType: Number): void {
-    debugger
     this.ManPowerList.forEach(item => {
       if (item.positionId === positionId) {
         item.positionType = positionType;
@@ -206,6 +206,7 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
   }
 
   onManpowerChange(item: any, value: string, field: string): void {
+    debugger
     const newValue = value === '' || value === null ? null : +value;
     
     if (field === "numberOfPosition") {
@@ -228,7 +229,22 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
       item[field] = newValue;
 
 
-    } else {
+    } else if(field === "contractual"){
+   
+
+      item[field] = newValue;
+
+      let objList = this.ManPowerList.filter(a => a.positionId === item.positionId && new Date(item.date) < new Date(a.date));
+
+      objList.forEach(obj => {
+          obj.contractual = item.contractual;
+      });
+
+
+    } 
+    
+    
+    else {
         item[field] = newValue;
     }
   }
@@ -266,6 +282,8 @@ export class MainPowerPlanComponent extends UnsubscribeOnDestroyAdapter implemen
       panelClass: colorName,
     });
   }
+ 
+
 
 
 }
